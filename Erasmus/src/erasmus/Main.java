@@ -68,6 +68,8 @@ public class Main extends ListenerAdapter {
 	public void onMessageReceived(MessageReceivedEvent event) {
 		if (!event.getMessage().getContent().startsWith("$")) return;
 		
+		String jk;
+		
 		Message message = event.getMessage();
 		Guild guild = event.getGuild();
 		TextChannel textChannel = event.getTextChannel();
