@@ -95,6 +95,7 @@ public class Main extends ListenerAdapter {
 		else {
 			args = new String[1];
 			args[0] = content;
+			
 		}
 		
 		Command command = null;
