@@ -12,7 +12,9 @@ import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
+import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.ReadyEvent;
+import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
@@ -71,9 +73,10 @@ public class Main extends ListenerAdapter {
 		Message message = event.getMessage();
 		Guild guild = event.getGuild();
 		TextChannel textChannel = event.getTextChannel();
-		String name = event.getAuthor().getName();
+		User author = event.getAuthor();
+		String name = author.getName();
 		content = message.getContent().toLowerCase().substring(1);
-		
+				
 		if (content.contains(" ")) {
 			int length = 1;
 			for (int x = 0; x < content.length() - 1; x++) {
@@ -183,5 +186,9 @@ public class Main extends ListenerAdapter {
 		commands.remove(yesCommand);
 		commands.remove(noCommand);
 		isResponse = false;
+	}
+	
+	public void onGuildMemberJoin(GuildMemberJoinEvent event) {
+		event.getGuild().getTextChannelById("281492686844854272").sendMessage("```Welcome " + event.getMember().getAsMention() + " to the server!```").queue();
 	}
 }
