@@ -3,7 +3,7 @@ package erasmus.commands;
 import java.util.ArrayList;
 
 import erasmus.Main;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.core.entities.Message;
 
 public abstract class Command {
 	public int minArgs;
@@ -20,17 +20,17 @@ public abstract class Command {
 	public String getDescription() { return description;}
 	public ArrayList<String> getAliases() { return aliases;}
 	public ArrayList<Command> getSubCommands() { return subCommands;}
-	public boolean checkArgs (String[] args, MessageReceivedEvent event) {
+	public boolean checkArgs (String[] args, Message message) {
 		if (maxArgs != -1 && args.length > maxArgs) {
-			event.getTextChannel().sendMessage(String.format("```css\nA maximum of %s arguments are permitted for the '$%s' command.\nUsage: %s```", maxArgs, fullName, getUsage())).queue();
+			message.getTextChannel().sendMessage(String.format("```css\nA maximum of %s arguments are permitted for the '$%s' command.\nUsage: %s```", maxArgs, fullName, getUsage())).queue();
 			return false;
 		}
 		if (args.length < minArgs) {
-			event.getTextChannel().sendMessage(String.format("```css\nA minimum of %s arguments are required for the '$%s' command.\nUsage: %s```", minArgs, fullName, getUsage())).queue();
+			message.getTextChannel().sendMessage(String.format("```css\nA minimum of %s arguments are required for the '$%s' command.\nUsage: %s```", minArgs, fullName, getUsage())).queue();
 			return false;
 		}
 		return true;
 	}
-	public abstract void called(String[] args, MessageReceivedEvent event);
+	public abstract void called(String[] args, Message message);
 	public void addAlias(String alias) { aliases.add(alias);}
 }

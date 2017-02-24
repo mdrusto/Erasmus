@@ -16,6 +16,7 @@ import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.ReadyEvent;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.core.events.message.guild.GuildMessageUpdateEvent;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
@@ -30,7 +31,7 @@ public class Main extends ListenerAdapter {
 	
 	public static Command currentCommand;
 	public static String[] currentArgs;
-	public static MessageReceivedEvent currentEvent;
+	public static Message currentMessage;
 	
 	private static Help helpCommand = new Help();
 	private static Ping pingCommand = new Ping();
@@ -65,15 +66,18 @@ public class Main extends ListenerAdapter {
 		event.getJDA().getPresence().setGame(Game.of("'" + PREFIX + "help' for help"));
 	}
 	
-	@SuppressWarnings("unused")
 	@Override
 	public void onMessageReceived(MessageReceivedEvent event) {
-		if (!event.getMessage().getContent().startsWith("$")) return;
+		called(event.getMessage());
+	}
+	
+	@SuppressWarnings("unused")
+	public void called(Message message) {
+		if (!message.getContent().startsWith("$")) return;
 		
-		Message message = event.getMessage();
-		Guild guild = event.getGuild();
-		TextChannel textChannel = event.getTextChannel();
-		User author = event.getAuthor();
+		Guild guild = message.getGuild();
+		TextChannel textChannel = message.getTextChannel();
+		User author = message.getAuthor();
 		String name = author.getName();
 		content = message.getContent().toLowerCase().substring(1);
 				
@@ -159,11 +163,11 @@ public class Main extends ListenerAdapter {
 			if (!command.equals(yesCommand) && !command.equals(noCommand)) {
 				currentCommand = command;
 				currentArgs = newArgs;
-				currentEvent = event;
+				currentMessage = message;
 				choice = "";
 			}
 			try {
-				command.called(newArgs, event);
+				command.called(newArgs, message);
 			}
 			catch (Exception e) {
 				StringBuilder error = new StringBuilder("");
@@ -190,5 +194,9 @@ public class Main extends ListenerAdapter {
 	
 	public void onGuildMemberJoin(GuildMemberJoinEvent event) {
 		event.getGuild().getTextChannelById("281492686844854272").sendMessage("```Welcome " + event.getMember().getAsMention() + " to the server!```").queue();
+	}
+	
+	public void onGuildMessageUpdate(GuildMessageUpdateEvent event) {
+		called(event.getMessage());
 	}
 }

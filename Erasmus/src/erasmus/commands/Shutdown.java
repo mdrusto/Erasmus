@@ -1,6 +1,6 @@
 package erasmus.commands;
 
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.core.entities.Message;
 
 public class Shutdown extends Command {
 	
@@ -11,9 +11,9 @@ public class Shutdown extends Command {
 		maxArgs = 0;
 	}
 	@Override
-	public void called(String[] args, MessageReceivedEvent event) {
-		if (!checkArgs(args,  event)) return;
-		event.getJDA().getTextChannelById("281484833765588992").sendMessage("```Shutting down```").queue();
-		event.getJDA().shutdown(true);
+	public void called(String[] args, Message message) {
+		if (!checkArgs(args, message)) return;
+		message.getJDA().getTextChannelById("281484833765588992").sendMessage("```Shutting down```").queue();
+		message.getJDA().shutdown(true);
 	}
 }

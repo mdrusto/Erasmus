@@ -1,7 +1,7 @@
 package erasmus.commands;
 
 import erasmus.Main;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.core.entities.Message;
 
 public class Ping extends Command {
 	
@@ -15,10 +15,10 @@ public class Ping extends Command {
 	}
 
 	@Override
-	public void called(String[] args, MessageReceivedEvent event) {
-		if (!checkArgs(args,  event)) return;
+	public void called(String[] args, Message message) {
+		if (!checkArgs(args, message)) return;
 
-		event.getTextChannel().sendMessage("Piiiiiiiiiiiiiiiiing").queue();
+		message.getTextChannel().sendMessage("Piiiiiiiiiiiiiiiiing").queue();
 	}
 	
 }

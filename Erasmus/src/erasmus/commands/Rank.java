@@ -1,6 +1,6 @@
 package erasmus.commands;
 
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.core.entities.Message;
 
 public class Rank extends Command {
 	
@@ -9,7 +9,7 @@ public class Rank extends Command {
 	}
 
 	@Override
-	public void called(String[] args, MessageReceivedEvent event) {
+	public void called(String[] args, Message message) {
 		
 	}
 

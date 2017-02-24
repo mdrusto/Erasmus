@@ -1,7 +1,7 @@
 package erasmus.commands;
 
 import erasmus.Main;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.core.entities.Message;
 
 public class Yes extends Command {
 	
@@ -13,10 +13,10 @@ public class Yes extends Command {
 	}
 
 	@Override
-	public void called(String[] args, MessageReceivedEvent event) {
-		if (!checkArgs(args,  event)) return;
+	public void called(String[] args, Message message) {
+		if (!checkArgs(args, message)) return;
 		Main.choice = "yes";
-		Main.currentCommand.called(Main.currentArgs, Main.currentEvent);
+		Main.currentCommand.called(Main.currentArgs, Main.currentMessage);
 		Main.removeResponse();
 	}
 

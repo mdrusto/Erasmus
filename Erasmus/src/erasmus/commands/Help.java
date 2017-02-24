@@ -3,7 +3,7 @@ package erasmus.commands;
 import java.util.ArrayList;
 
 import erasmus.Main;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.core.entities.Message;
 
 public class Help extends Command {
 	
@@ -15,8 +15,8 @@ public class Help extends Command {
 	}
 	
 	@Override
-	public void called(String[] args, MessageReceivedEvent event) {
-		if (!checkArgs(args,  event)) return;
+	public void called(String[] args, Message message) {
+		if (!checkArgs(args, message)) return;
 
 		String output = "";
 		if (args.length == 0) {
@@ -69,7 +69,7 @@ public class Help extends Command {
 				output += "Usage: " + command.getUsage();
 			}
 		}
-		event.getTextChannel().sendMessage("```" + output + "```").queue();
+		message.getTextChannel().sendMessage("```" + output + "```").queue();
 	}
 
 }

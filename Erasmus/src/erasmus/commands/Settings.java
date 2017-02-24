@@ -1,7 +1,7 @@
 package erasmus.commands;
 
 import erasmus.Main;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.core.entities.Message;
 
 public class Settings extends Command {
 	
@@ -17,8 +17,8 @@ public class Settings extends Command {
 	}
 	
 	@Override
-	public void called(String[] args, MessageReceivedEvent event) {
-		if (!checkArgs(args,  event)) return;
+	public void called(String[] args, Message message) {
+		if (!checkArgs(args, message)) return;
 		
 	}
 	
@@ -31,15 +31,15 @@ public class Settings extends Command {
 		}
 
 		@Override
-		public void called(String[] args, MessageReceivedEvent event) {
-			if (!checkArgs(args, event)) return;
+		public void called(String[] args, Message message) {
+			if (!checkArgs(args, message)) return;
 			if (!Main.isResponse) {
 				Main.addResponse();
-				event.getTextChannel().sendMessage("```Are you sure you want to reset the settings?\nType &yes or $no```").queue();
+				message.getTextChannel().sendMessage("```Are you sure you want to reset the settings?\nType &yes or $no```").queue();
 			}
 			else {
-				if (Main.choice.equals("yes")) event.getTextChannel().sendMessage("```Erasmus' settings have been reset.```").queue();
-				else event.getTextChannel().sendMessage("```Erasmus' settings will not be reset.```").queue();
+				if (Main.choice.equals("yes")) message.getTextChannel().sendMessage("```Erasmus' settings have been reset.```").queue();
+				else message.getTextChannel().sendMessage("```Erasmus' settings will not be reset.```").queue();
 			}
 		}
 		
@@ -55,9 +55,9 @@ public class Settings extends Command {
 		}
 
 		@Override
-		public void called(String[] args, MessageReceivedEvent event) {
-			if (!checkArgs(args, event)) return;
-			event.getTextChannel().sendMessage(String.format("```'%s' has been set to '%s'.```", args[0], args[1])).queue();
+		public void called(String[] args, Message message) {
+			if (!checkArgs(args, message)) return;
+			message.getTextChannel().sendMessage(String.format("```'%s' has been set to '%s'.```", args[0], args[1])).queue();
 		}
 	}
 	
@@ -71,15 +71,15 @@ public class Settings extends Command {
 		}
 
 		@Override
-		public void called(String[] args, MessageReceivedEvent event) {
-			if (!checkArgs(args, event)) return;
+		public void called(String[] args, Message message) {
+			if (!checkArgs(args, message)) return;
 			if (!Main.isResponse) {
 				Main.addResponse();
-				event.getTextChannel().sendMessage("```Are you sure you want to remove this setting?\nType $yes or $no```").queue();
+				message.getTextChannel().sendMessage("```Are you sure you want to remove this setting?\nType $yes or $no```").queue();
 			}
 			else {
-				if (Main.choice.equals("yes")) event.getTextChannel().sendMessage("```'" + args[0] + "' has been removed.```").queue();
-				else event.getTextChannel().sendMessage("```'" + args[0] + "' will not be removed.```").queue();
+				if (Main.choice.equals("yes")) message.getTextChannel().sendMessage("```'" + args[0] + "' has been removed.```").queue();
+				else message.getTextChannel().sendMessage("```'" + args[0] + "' will not be removed.```").queue();
 			}
 		}
 	}
