@@ -116,14 +116,6 @@ public class Main extends ListenerAdapter {
 						finalCommand = command;
 						currentList = command.getSubCommands();
 						index = d;
-						/*if (d > 0) {
-							int arrayLength = args.length - d - 1;
-							newArgs = new String[arrayLength];
-							for (int g = 0; g < arrayLength; g++) {
-								newArgs[g] = args[g + d + 1];
-							}
-						}
-						else newArgs = new String[0];*/
 						continue layersLoop;
 					}
 					for (int c = 0; c < command.getAliases().size(); c++) {
@@ -131,11 +123,6 @@ public class Main extends ListenerAdapter {
 							finalCommand = command;
 							currentList = command.getSubCommands();
 							index = d;
-							/*int arrayLength = args.length - d - 1;
-							newArgs = new String[arrayLength];
-							for (int g = 0; g < arrayLength; g++) {
-								newArgs[g] = args[g + d + 1];
-							}*/
 							continue layersLoop;
 						}
 					}
@@ -144,13 +131,6 @@ public class Main extends ListenerAdapter {
 					break layersLoop;
 				}
 			}
-			/*if (d > 0) {
-				int arrayLength = args.length - d;
-				newArgs = new String[arrayLength];
-				for (int g = 0; g < arrayLength; g++) {
-					newArgs[g] = args[g + d];
-				}
-			}*/
 			break layersLoop;
 		}
 				
