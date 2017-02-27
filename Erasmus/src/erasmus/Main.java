@@ -105,34 +105,37 @@ public class Main extends ListenerAdapter {
 			
 		}
 		
-		Command command = null;
+		Command finalCommand = null;
 		ArrayList<Command> currentList = commands;
 		String[] newArgs = null;
+		int index = 0;
 		layersLoop: for (int d = 0; true; d++) {
-			for (int x = 0; x < currentList.size(); x++) {
+			for (Command command: currentList) {
 				try {
-					if (args[d].equals(currentList.get(x).getName())) {
-						command = currentList.get(x);
+					if (args[d].equals(command.getName())) {
+						finalCommand = command;
 						currentList = command.getSubCommands();
-						if (d > 0) {
+						index = d;
+						/*if (d > 0) {
 							int arrayLength = args.length - d - 1;
 							newArgs = new String[arrayLength];
 							for (int g = 0; g < arrayLength; g++) {
 								newArgs[g] = args[g + d + 1];
 							}
 						}
-						else newArgs = new String[0];
+						else newArgs = new String[0];*/
 						continue layersLoop;
 					}
-					for (int c = 0; c < currentList.get(x).getAliases().size(); c++) {
-						if (args[d].equals(currentList.get(x).getAliases().get(c))) {
-							command = currentList.get(x);
+					for (int c = 0; c < command.getAliases().size(); c++) {
+						if (args[d].equals(command.getAliases().get(c))) {
+							finalCommand = command;
 							currentList = command.getSubCommands();
-							int arrayLength = args.length - d - 1;
+							index = d;
+							/*int arrayLength = args.length - d - 1;
 							newArgs = new String[arrayLength];
 							for (int g = 0; g < arrayLength; g++) {
 								newArgs[g] = args[g + d + 1];
-							}
+							}*/
 							continue layersLoop;
 						}
 					}
@@ -141,16 +144,17 @@ public class Main extends ListenerAdapter {
 					break layersLoop;
 				}
 			}
-			if (d > 0) {
+			/*if (d > 0) {
 				int arrayLength = args.length - d;
 				newArgs = new String[arrayLength];
 				for (int g = 0; g < arrayLength; g++) {
 					newArgs[g] = args[g + d];
 				}
-			}
+			}*/
 			break layersLoop;
 		}
-		if (command == null) {
+				
+		if (finalCommand == null) {
 			StringBuilder builder = new StringBuilder();
 			for (int x = 0; x < args.length; x++) {
 				builder.append(args[x]);
@@ -159,15 +163,22 @@ public class Main extends ListenerAdapter {
 			textChannel.sendMessage("```The command '" + builder.toString() + "' was not recognized.```").queue();
 		}
 		else {
+			int arrayLength = args.length - index - 1;
+			newArgs = new String[arrayLength];
+			for (int g = 0; g < arrayLength; g++) {
+				newArgs[g] = args[g + index + 1];
+			}
+			
 			boolean isStillResponse = isResponse;
-			if (!command.equals(yesCommand) && !command.equals(noCommand)) {
-				currentCommand = command;
+			
+			if (!finalCommand.equals(yesCommand) && !finalCommand.equals(noCommand)) {
+				currentCommand = finalCommand;
 				currentArgs = newArgs;
 				currentMessage = message;
 				choice = "";
 			}
 			try {
-				command.called(newArgs, message);
+				finalCommand.called(newArgs, message);
 			}
 			catch (Exception e) {
 				StringBuilder error = new StringBuilder("");

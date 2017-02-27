@@ -22,11 +22,11 @@ public abstract class Command {
 	public ArrayList<Command> getSubCommands() { return subCommands;}
 	public boolean checkArgs (String[] args, Message message) {
 		if (maxArgs != -1 && args.length > maxArgs) {
-			message.getTextChannel().sendMessage(String.format("```css\nA maximum of %s arguments are permitted for the '$%s' command.\nUsage: %s```", maxArgs, fullName, getUsage())).queue();
+			message.getTextChannel().sendMessage(String.format("```A maximum of %s arguments are permitted for the '$%s' command.\nUsage: %s```", maxArgs, fullName, getUsage())).queue();
 			return false;
 		}
 		if (args.length < minArgs) {
-			message.getTextChannel().sendMessage(String.format("```css\nA minimum of %s arguments are required for the '$%s' command.\nUsage: %s```", minArgs, fullName, getUsage())).queue();
+			message.getTextChannel().sendMessage(String.format("```A minimum of %s arguments are required for the '$%s' command.\nUsage: %s```", minArgs, fullName, getUsage())).queue();
 			return false;
 		}
 		return true;

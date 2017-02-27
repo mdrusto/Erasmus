@@ -66,7 +66,11 @@ public class Help extends Command {
 				if (command.getAliases().isEmpty()) output += "None";
 				output += "\n------------------------------------------------\n";
 				output += "Description: " + command.getDescription() + "\n"; 
-				output += "Usage: " + command.getUsage();
+				output += "Usage: " + command.getUsage() + "\n";
+				output += "Minimum arguments: " + command.minArgs + "\n";
+				if (command.maxArgs != -1)
+					output += "Maximum arguments: " + command.maxArgs;
+				else output += "Maximum arguments: no limit";
 			}
 		}
 		message.getTextChannel().sendMessage("```" + output + "```").queue();

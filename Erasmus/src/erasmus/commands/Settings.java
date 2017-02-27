@@ -8,8 +8,8 @@ public class Settings extends Command {
 	public Settings() {
 		description = "Add, remove or change Erasmus' settings";
 		usage = Main.PREFIX + name;
-		minArgs = 1;
-		maxArgs = -1;
+		minArgs = 0;
+		maxArgs = 0;
 		
 		subCommands.add(new Reset());
 		subCommands.add(new Set());
