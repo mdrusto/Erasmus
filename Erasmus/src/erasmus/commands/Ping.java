@@ -1,13 +1,12 @@
 package erasmus.commands;
 
-import erasmus.Main;
-import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.core.entities.TextChannel;
 
 public class Ping extends Command {
 	
 	public Ping () {
+		super();
 		description = "Ping!";
-		usage = Main.PREFIX + name;
 		addAlias("pong");
 		addAlias("peng");
 		minArgs = 0;
@@ -15,10 +14,10 @@ public class Ping extends Command {
 	}
 
 	@Override
-	public void called(String[] args, Message message) {
-		if (!checkArgs(args, message)) return;
+	public void called(String[] args, TextChannel textChannel) {
+		if (!checkArgs(args, textChannel)) return;
 
-		message.getTextChannel().sendMessage("Piiiiiiiiiiiiiiiiing").queue();
+		textChannel.sendMessage("Piiiiiiiiiiiiiiiiing").queue();
 	}
 	
 }

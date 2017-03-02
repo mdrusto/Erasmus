@@ -1,19 +1,20 @@
 package erasmus.commands;
 
-import net.dv8tion.jda.core.entities.Message;
+import erasmus.Main;
+import net.dv8tion.jda.core.entities.TextChannel;
 
 public class Shutdown extends Command {
 	
 	public Shutdown () {
+		super();
 		description = "Shut Erasmus down.";
 		addAlias("turnoff");
 		minArgs = 0;
 		maxArgs = 0;
 	}
 	@Override
-	public void called(String[] args, Message message) {
-		if (!checkArgs(args, message)) return;
-		message.getJDA().getTextChannelById("281484833765588992").sendMessage("```Shutting down```").queue();
-		message.getJDA().shutdown(true);
+	public void called(String[] args, TextChannel textChannel) {
+		if (!checkArgs(args, textChannel)) return;
+		Main.shutdown();
 	}
 }

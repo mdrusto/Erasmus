@@ -3,9 +3,10 @@ package erasmus.commands;
 import java.util.ArrayList;
 
 import erasmus.Main;
-import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.core.entities.TextChannel;
 
 public abstract class Command {
+	public boolean ignoreCase = true;
 	public int minArgs;
 	public int maxArgs;
 	public String name = getClass().getSimpleName().toLowerCase();
@@ -13,24 +14,24 @@ public abstract class Command {
 	public String description;
 	public ArrayList<String> aliases = new ArrayList<String>();
 	public ArrayList<Command> subCommands = new ArrayList<Command>();
-	public String usage = Main.PREFIX + fullName;
+	public String usage = Main.getPrefix() + fullName;
 	public String getUsage() { return usage;}
 	public String getName() { return name;}
 	public String getFullName() { return fullName;}
 	public String getDescription() { return description;}
 	public ArrayList<String> getAliases() { return aliases;}
 	public ArrayList<Command> getSubCommands() { return subCommands;}
-	public boolean checkArgs (String[] args, Message message) {
+	public boolean checkArgs (String[] args, TextChannel textChannel) {
 		if (maxArgs != -1 && args.length > maxArgs) {
-			message.getTextChannel().sendMessage(String.format("```A maximum of %s arguments are permitted for the '$%s' command.\nUsage: %s```", maxArgs, fullName, getUsage())).queue();
+			textChannel.sendMessage(String.format("```A maximum of %s arguments are permitted for the '$%s' command.\nUsage: %s```", maxArgs, fullName, getUsage())).queue();
 			return false;
 		}
 		if (args.length < minArgs) {
-			message.getTextChannel().sendMessage(String.format("```A minimum of %s arguments are required for the '$%s' command.\nUsage: %s```", minArgs, fullName, getUsage())).queue();
+			textChannel.sendMessage(String.format("```A minimum of %s arguments are required for the '$%s' command.\nUsage: %s```", minArgs, fullName, getUsage())).queue();
 			return false;
 		}
 		return true;
 	}
-	public abstract void called(String[] args, Message message);
+	public abstract void called(String[] args, TextChannel textChannel);
 	public void addAlias(String alias) { aliases.add(alias);}
 }

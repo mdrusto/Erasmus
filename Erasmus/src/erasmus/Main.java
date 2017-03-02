@@ -1,16 +1,25 @@
 package erasmus;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Properties;
 
 import javax.security.auth.login.LoginException;
 
 import erasmus.commands.*;
+import erasmus.properties.ParseException;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.core.entities.MessageChannel;
+import net.dv8tion.jda.core.entities.PrivateChannel;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.ReadyEvent;
@@ -22,24 +31,37 @@ import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 public class Main extends ListenerAdapter {
 	
-	public static final String PREFIX = "$";
 	public static final ArrayList<Command> commands = new ArrayList<Command>();
 	public static boolean isResponse = false;
-	String[] args = new String[1];
-	String content;
+	
 	public static String choice;
 	
 	public static Command currentCommand;
 	public static String[] currentArgs;
-	public static Message currentMessage;
+	public static TextChannel currentTextChannel;
 	
-	private static Help helpCommand = new Help();
-	private static Ping pingCommand = new Ping();
-	private static Shutdown shutdownCommand = new Shutdown();
-	private static Type typeCommand = new Type();
-	private static Settings settingsCommand = new Settings();
-	private static Yes yesCommand = new Yes();
-	private static No noCommand = new No();
+	private static Help helpCommand;
+	private static Ping pingCommand;
+	private static Shutdown shutdownCommand;
+	private static Type typeCommand;
+	private static Settings settingsCommand;
+	private static Yes yesCommand;
+	private static No noCommand;
+	
+	private static Properties properties = new Properties();
+	
+	private static boolean readEdits;
+	private static int updateSettingsInterval;
+	private static int updateStatsInterval;
+	private static String guildId;
+	private static TextChannel infoTextChannel;
+	private static TextChannel announcementsTextChannel;
+	private static User user;
+	private static String prefix;
+	
+	private static JDA jda;
+	private static Guild guild;
+	private static MessageChannel outputChannel;
 	
 	@SuppressWarnings("unused")
 	public static void main(String[] args) {
@@ -49,38 +71,124 @@ public class Main extends ListenerAdapter {
 					.addListener(new Main())
 					.buildBlocking();
 		}
-		catch (RateLimitedException e) {e.printStackTrace();}
-		catch (LoginException e) {e.printStackTrace();}
-		catch (InterruptedException e) {e.printStackTrace();}
+		catch (RateLimitedException | LoginException | InterruptedException e) {e.printStackTrace();}
+	}
+	
+	public static TextChannel getInfoTextChannel() {
+		return infoTextChannel;
+	}
+	
+	public static TextChannel getAnnouncementsTextChannel() {
+		return announcementsTextChannel;
+	}
+	
+	public static String getPrefix() {
+		return prefix;
+	}
+	
+	public static Properties getProperties() {
+		return properties;
+	}
+	
+	@Override
+	public void onReady(ReadyEvent event) {
+		jda = event.getJDA();
+
+		try {
+			FileInputStream in = new FileInputStream("config.properties");
+			properties.load(in);
+			loadProperties();
+		}
+		catch (FileNotFoundException e) {
+			String userId = "142046468151312384";
+			user = jda.getUserById(userId);
+			properties.setProperty("userId", userId);
+			if (!user.hasPrivateChannel()) user.openPrivateChannel().queue();
+			outputChannel = user.getPrivateChannel();
+			
+			updateSettingsInterval = 10;
+			properties.setProperty("updateSettingsInterval", String.valueOf(updateSettingsInterval));
+			
+			updateStatsInterval = 10;
+			properties.setProperty("updateStatsInterval", String.valueOf(updateStatsInterval));
+			
+			guildId = "225743704533630986";
+			properties.setProperty("guildId", guildId);
+			guild = jda.getGuildById(guildId);
+			
+			String infoTextChannelId = "281484833765588992";
+			infoTextChannel = guild.getTextChannelById(infoTextChannelId);
+			properties.setProperty("infoTextChannelId", infoTextChannelId);
+			
+			String announcementsTextChannelId = "281492686844854272";
+			announcementsTextChannel = guild.getTextChannelById(announcementsTextChannelId);
+			properties.setProperty("announcementsTextChannelId", announcementsTextChannelId);
+			
+			readEdits = false;
+			properties.setProperty("readEdits", String.valueOf(readEdits));
+			
+			prefix = "$";
+			properties.setProperty("prefix", prefix);
+			
+			
+			
+			File file = new File("config.properties");
+			FileOutputStream fileOut = null;
+			try {
+				fileOut = new FileOutputStream(file);
+			}
+			catch(FileNotFoundException error) {
+				error(e);
+			}
+			try {
+				properties.store(fileOut, "Properties");
+			}
+			catch (IOException error) {
+				error(e);
+			}
+		}
+		catch (IOException e) {
+			error(e);
+		}
+		catch (ParseException e) {
+			error(ErrorType.COULDNOTPARSE);
+		}
+		
+		helpCommand = new Help();
+		pingCommand = new Ping();
+		shutdownCommand = new Shutdown();
+		typeCommand = new Type();
+		settingsCommand = new Settings();
 		
 		commands.add(helpCommand);
 		commands.add(pingCommand);
 		commands.add(shutdownCommand);
 		commands.add(typeCommand);
 		commands.add(settingsCommand);
-	}
-	
-	@Override
-	public void onReady(ReadyEvent event) {
-		event.getJDA().getTextChannelById("281484833765588992").sendMessage("```Starting up```").queue();
-		event.getJDA().getPresence().setGame(Game.of("'" + PREFIX + "help' for help"));
+		
+		infoTextChannel.sendMessage("```Started up successfully```").queue();
+		event.getJDA().getPresence().setGame(Game.of("'" + prefix + "help' for help"));
 	}
 	
 	@Override
 	public void onMessageReceived(MessageReceivedEvent event) {
-		called(event.getMessage());
+		if (!event.getMessage().getContent().startsWith(prefix)) return;
+		commandCalled(event.getMessage());
+	}
+	
+	public static void setProperty(String key, String value) {
+		properties.setProperty(key, value);
 	}
 	
 	@SuppressWarnings("unused")
-	public void called(Message message) {
-		if (!message.getContent().startsWith("$")) return;
-		
+	public void commandCalled(Message message) {
 		Guild guild = message.getGuild();
 		TextChannel textChannel = message.getTextChannel();
 		User author = message.getAuthor();
 		String name = author.getName();
-		content = message.getContent().toLowerCase().substring(1);
-				
+		String content = message.getContent().substring(prefix.length());
+		String[] args;
+		
 		if (content.contains(" ")) {
 			int length = 1;
 			for (int x = 0; x < content.length() - 1; x++) {
@@ -112,14 +220,14 @@ public class Main extends ListenerAdapter {
 		layersLoop: for (int d = 0; true; d++) {
 			for (Command command: currentList) {
 				try {
-					if (args[d].equals(command.getName())) {
+					if (args[d].equalsIgnoreCase(command.getName())) {
 						finalCommand = command;
 						currentList = command.getSubCommands();
 						index = d;
 						continue layersLoop;
 					}
 					for (int c = 0; c < command.getAliases().size(); c++) {
-						if (args[d].equals(command.getAliases().get(c))) {
+						if (args[d].equalsIgnoreCase(command.getAliases().get(c))) {
 							finalCommand = command;
 							currentList = command.getSubCommands();
 							index = d;
@@ -134,19 +242,19 @@ public class Main extends ListenerAdapter {
 			break layersLoop;
 		}
 				
-		if (finalCommand == null) {
-			StringBuilder builder = new StringBuilder();
-			for (int x = 0; x < args.length; x++) {
-				builder.append(args[x]);
-				if (x != args.length - 1) builder.append(" ");
-			}
-			textChannel.sendMessage("```The command '" + builder.toString() + "' was not recognized.```").queue();
-		}
+		if (finalCommand == null) textChannel.sendMessage("```The command '" + content + "' was not recognized.```").queue();
 		else {
 			int arrayLength = args.length - index - 1;
 			newArgs = new String[arrayLength];
-			for (int g = 0; g < arrayLength; g++) {
-				newArgs[g] = args[g + index + 1];
+			if (finalCommand.ignoreCase) {
+				for (int g = 0; g < arrayLength; g++) {
+					newArgs[g] = args[g + index + 1];
+				}
+			}
+			else {
+				for (int g = 0; g < arrayLength; g++) {
+					newArgs[g] = args[g + index + 1].toLowerCase();
+				}
 			}
 			
 			boolean isStillResponse = isResponse;
@@ -154,21 +262,30 @@ public class Main extends ListenerAdapter {
 			if (!finalCommand.equals(yesCommand) && !finalCommand.equals(noCommand)) {
 				currentCommand = finalCommand;
 				currentArgs = newArgs;
-				currentMessage = message;
+				currentTextChannel = textChannel;
 				choice = "";
 			}
 			try {
-				finalCommand.called(newArgs, message);
+				finalCommand.called(newArgs, textChannel);
 			}
 			catch (Exception e) {
-				StringBuilder error = new StringBuilder("");
-				for (StackTraceElement s: e.getStackTrace()) {
-					error.append(s.toString() + "\n");
-				}
-				textChannel.sendMessage("```css\n" + error + "```").queue();
+				error(e);
 			}
 			if (isResponse && isStillResponse) removeResponse();
 		}
+	}
+	
+	private static void error(ErrorType type, String... args) {
+		outputChannel.sendMessage("```Error: " + String.format(type.getMessage(), (Object[])args) + "```").queue();
+		jda.shutdown();
+	}
+	
+	private static void error(Exception e) {
+		StringBuilder error = new StringBuilder("");
+		for (StackTraceElement s: e.getStackTrace()) {
+			error.append(s.toString() + "\n");
+		}
+		error(ErrorType.OTHER, error.toString());
 	}
 	
 	public static void addResponse() {
@@ -188,6 +305,77 @@ public class Main extends ListenerAdapter {
 	}
 	
 	public void onGuildMessageUpdate(GuildMessageUpdateEvent event) {
-		called(event.getMessage());
+		if (readEdits) commandCalled(event.getMessage());
+	}
+	
+	public static void loadProperties() throws FileNotFoundException, IOException, NumberFormatException, ParseException {
+		String userId = properties.getProperty("userId");
+		user = jda.getUserById(userId);
+		PrivateChannel test_privateChannel = user.getPrivateChannel();
+		if (test_privateChannel == null) {
+			System.out.println("Error: No user found with id " + userId);
+			jda.shutdown();
+		}
+		outputChannel = test_privateChannel;
+		
+		int test_updateSettingsInterval = 0;
+		try {
+			test_updateSettingsInterval = Integer.parseInt(properties.getProperty("updateSettingsInterval"));
+		}
+		catch (NumberFormatException e) {
+			throw new ParseException("int", "updateSettingsInterval", properties.getProperty("updateSettingsInterval"));
+		}
+		updateSettingsInterval = test_updateSettingsInterval;
+		
+		int test_updateStatsInterval = 0;
+		try {
+			test_updateStatsInterval = Integer.parseInt(properties.getProperty("updateStatsInterval"));
+		}
+		catch (NumberFormatException e) {
+			throw new ParseException("int", "updateStatsInterval", properties.getProperty("updateStatsInterval"));
+		}
+		updateStatsInterval = test_updateStatsInterval;
+		
+		guildId = properties.getProperty("guildId");
+		Guild test_guild = jda.getGuildById(guildId);
+		if (test_guild == null) error(ErrorType.GUILDNOTFOUND);
+		guild = test_guild;
+		
+		TextChannel test_infoTextChannel = guild.getTextChannelById(properties.getProperty("infoTextChannelId"));
+		if (test_infoTextChannel == null) error(ErrorType.TEXTCHANNELNOTFOUND);
+		infoTextChannel = test_infoTextChannel;
+		outputChannel = test_infoTextChannel;
+		
+		TextChannel test_announcementsTextChannel = guild.getTextChannelById(properties.getProperty("announcementsTextChannelId"));
+		if (test_announcementsTextChannel == null) error(ErrorType.TEXTCHANNELNOTFOUND);
+		announcementsTextChannel = test_announcementsTextChannel;
+		
+		String test_readEdits = properties.getProperty("readEdits");
+		if (!test_readEdits.equalsIgnoreCase("true") && !test_readEdits.equalsIgnoreCase("false"))
+			throw new ParseException("boolean", "readEdits", test_readEdits);
+		readEdits = Boolean.parseBoolean(test_readEdits);
+		
+		prefix = properties.getProperty("prefix");
+	}
+	
+	public static void shutdown() {
+		FileOutputStream out = null;
+		try {
+			out = new FileOutputStream("config.properties");
+		}
+		catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		try {
+			properties.store(out, "---No Comment---");
+			out.close();
+		}
+		catch(IOException e) {
+			e.printStackTrace();
+		}
+		
+		infoTextChannel.sendMessage("```Shutting down```").queue();
+		
+		jda.shutdownNow(false);
 	}
 }

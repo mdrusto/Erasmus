@@ -3,27 +3,28 @@ package erasmus.commands;
 import java.util.ArrayList;
 
 import erasmus.Main;
-import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.core.entities.TextChannel;
 
 public class Help extends Command {
 	
 	public Help() {
+		super();
 		description = "Help with a specific command.";
-		usage = Main.PREFIX + name + " [command]";
+		usage += " [command]";
 		minArgs = 0;
 		maxArgs = -1;
 	}
 	
 	@Override
-	public void called(String[] args, Message message) {
-		if (!checkArgs(args, message)) return;
+	public void called(String[] args, TextChannel textChannel) {
+		if (!checkArgs(args, textChannel)) return;
 
 		String output = "";
 		if (args.length == 0) {
 			output += "=============== List of all my commands ===============\n\n";
 			for (int x = 0; x < Main.commands.size(); x++) {
 				Command command = Main.commands.get(x);
-				output += "$" + command.getName() + " - " + command.getDescription() + "\n";
+				output += Main.getPrefix() + command.getName() + " - " + command.getDescription() + "\n";
 			}
 			output += "\n=======================================================";
 		}
@@ -58,7 +59,7 @@ public class Help extends Command {
 				output += "The command '" + builder.toString() + "' was not recognized.";
 			}
 			else {
-				output += "Command: " + Main.PREFIX + command.getFullName() + "  |  Aliases: ";
+				output += "Command: " + Main.getPrefix() + command.getFullName() + "  |  Aliases: ";
 				for (int x = 0; x < command.getAliases().size(); x++) {
 					output += "'" + command.getAliases().get(x) + "'";
 					if (x != command.getAliases().size() - 1) output += ", ";
@@ -73,7 +74,7 @@ public class Help extends Command {
 				else output += "Maximum arguments: no limit";
 			}
 		}
-		message.getTextChannel().sendMessage("```" + output + "```").queue();
+		textChannel.sendMessage("```" + output + "```").queue();
 	}
 
 }
