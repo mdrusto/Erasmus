@@ -2,7 +2,8 @@ package erasmus.commands;
 
 import java.util.ArrayList;
 
-import erasmus.Main;
+import erasmus.MessageOutput;
+import erasmus.properties.Values;
 import net.dv8tion.jda.core.entities.TextChannel;
 
 public abstract class Command {
@@ -14,7 +15,7 @@ public abstract class Command {
 	public String description;
 	public ArrayList<String> aliases = new ArrayList<String>();
 	public ArrayList<Command> subCommands = new ArrayList<Command>();
-	public String usage = Main.getPrefix() + fullName;
+	public String usage = Values.prefix + fullName;
 	public String getUsage() { return usage;}
 	public String getName() { return name;}
 	public String getFullName() { return fullName;}
@@ -23,11 +24,11 @@ public abstract class Command {
 	public ArrayList<Command> getSubCommands() { return subCommands;}
 	public boolean checkArgs (String[] args, TextChannel textChannel) {
 		if (maxArgs != -1 && args.length > maxArgs) {
-			textChannel.sendMessage(String.format("```A maximum of %s arguments are permitted for the '$%s' command.\nUsage: %s```", maxArgs, fullName, getUsage())).queue();
+			MessageOutput.normal("A maximum of **%s** arguments are permitted for the **$%s** command.\nUsage: **%s**", textChannel, String.valueOf(maxArgs), getFullName(), getUsage());
 			return false;
 		}
 		if (args.length < minArgs) {
-			textChannel.sendMessage(String.format("```A minimum of %s arguments are required for the '$%s' command.\nUsage: %s```", minArgs, fullName, getUsage())).queue();
+			MessageOutput.normal("A minimum of **%s** arguments are permitted for the **$%s** command.\nUsage: **%s**", textChannel, String.valueOf(minArgs), getFullName(), getUsage());
 			return false;
 		}
 		return true;

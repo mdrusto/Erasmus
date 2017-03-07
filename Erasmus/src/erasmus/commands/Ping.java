@@ -1,5 +1,6 @@
 package erasmus.commands;
 
+import erasmus.MessageOutput;
 import net.dv8tion.jda.core.entities.TextChannel;
 
 public class Ping extends Command {
@@ -17,7 +18,7 @@ public class Ping extends Command {
 	public void called(String[] args, TextChannel textChannel) {
 		if (!checkArgs(args, textChannel)) return;
 
-		textChannel.sendMessage("Piiiiiiiiiiiiiiiiing").queue();
+		MessageOutput.normal("Ping", textChannel);
 	}
 	
 }

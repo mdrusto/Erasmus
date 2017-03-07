@@ -3,13 +3,15 @@ package erasmus.commands;
 import java.util.ArrayList;
 
 import erasmus.Main;
+import erasmus.MessageOutput;
+import erasmus.properties.Values;
 import net.dv8tion.jda.core.entities.TextChannel;
 
 public class Help extends Command {
 	
 	public Help() {
 		super();
-		description = "Help with a specific command.";
+		description = "Help with a specific command, or get a list of all commands.";
 		usage += " [command]";
 		minArgs = 0;
 		maxArgs = -1;
@@ -24,7 +26,7 @@ public class Help extends Command {
 			output += "=============== List of all my commands ===============\n\n";
 			for (int x = 0; x < Main.commands.size(); x++) {
 				Command command = Main.commands.get(x);
-				output += Main.getPrefix() + command.getName() + " - " + command.getDescription() + "\n";
+				output += "**" + Values.prefix + command.getName() + "**" + " - " + command.getDescription() + "\n";
 			}
 			output += "\n=======================================================";
 		}
@@ -59,22 +61,22 @@ public class Help extends Command {
 				output += "The command '" + builder.toString() + "' was not recognized.";
 			}
 			else {
-				output += "Command: " + Main.getPrefix() + command.getFullName() + "  |  Aliases: ";
+				output += "**Command**: " + Values.prefix + command.getFullName() + "  |  **Aliases**: ";
 				for (int x = 0; x < command.getAliases().size(); x++) {
 					output += "'" + command.getAliases().get(x) + "'";
 					if (x != command.getAliases().size() - 1) output += ", ";
 				}
 				if (command.getAliases().isEmpty()) output += "None";
 				output += "\n------------------------------------------------\n";
-				output += "Description: " + command.getDescription() + "\n"; 
-				output += "Usage: " + command.getUsage() + "\n";
-				output += "Minimum arguments: " + command.minArgs + "\n";
+				output += "**Description**: " + command.getDescription() + "\n"; 
+				output += "**Usage**: " + command.getUsage() + "\n";
+				output += "**Minimum arguments**: " + command.minArgs + "\n";
 				if (command.maxArgs != -1)
-					output += "Maximum arguments: " + command.maxArgs;
-				else output += "Maximum arguments: no limit";
+					output += "**Maximum arguments**: " + command.maxArgs;
+				else output += "**Maximum arguments**: no limit";
 			}
 		}
-		textChannel.sendMessage("```" + output + "```").queue();
+		MessageOutput.normal(output, textChannel);
 	}
 
 }

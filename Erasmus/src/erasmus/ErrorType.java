@@ -1,6 +1,7 @@
 package erasmus;
 
 public enum ErrorType {
+	USERNOTFOUND("User with id %s was npt found"),
 	GUILDNOTFOUND("Guild with id %s was not found"),
 	TEXTCHANNELNOTFOUND("Text channel with id %s was not found"),
 	COULDNOTPARSE("The following value couldn't be parsed:\nKey: %s\nValue: %s\nVariable type: %s"),
