@@ -3,7 +3,7 @@ package erasmus.commands;
 import java.util.Enumeration;
 import java.util.Properties;
 
-import erasmus.Main;
+import erasmus.ErasmusListener;
 import erasmus.MessageOutput;
 import erasmus.properties.ConfigLoader;
 import erasmus.properties.ParseException;
@@ -13,14 +13,11 @@ import net.dv8tion.jda.core.entities.TextChannel;
 public class Settings extends Command {
 	
 	public Settings() {
+		super();
+		
 		description = "Get, set, save or reset Erasmus' settings";
 		minArgs = 1;
 		maxArgs = 3;
-		
-		subCommands.add(new Reset());
-		subCommands.add(new Set());
-		subCommands.add(new Get());
-		subCommands.add(new Save());
 		
 		usage += " [";
 		for (int x = 0; x < subCommands.size(); x++) {
@@ -36,7 +33,7 @@ public class Settings extends Command {
 		
 	}
 	
-	class Reset extends Command {
+	public static class Reset extends Command {
 		
 		Reset() {
 			super();
@@ -48,22 +45,21 @@ public class Settings extends Command {
 		@Override
 		public void called(String[] args, TextChannel textChannel) {
 			if (!checkArgs(args, textChannel)) return;
-			if (!Main.isResponse) {
-				Main.addResponse();
+			if (!ErasmusListener.isResponse) {
+				ErasmusListener.addResponse();
 				MessageOutput.normal("Are you sure you want to reset the settings?\nType **%syes** or **%sno**", textChannel, Values.prefix, Values.prefix);
 			}
 			else {
-				if (Main.choice.equals("yes")) {
+				if (ErasmusListener.choice.equals("yes")) {
 					ConfigLoader.setProperties(ConfigLoader.getDefaults());
 					MessageOutput.normal("Erasmus' settings have been reset.", textChannel);
 				}
 				else MessageOutput.normal("Erasmus' settings will not be reset.", textChannel);
 			}
 		}
-		
 	}
 	
-	class Set extends Command {
+	public static class Set extends Command {
 		
 		Set() {
 			super();
@@ -79,13 +75,13 @@ public class Settings extends Command {
 			if (!checkArgs(args, textChannel)) return;
 			try {
 				ConfigLoader.setProperty(args[0], args[1], textChannel);
-				MessageOutput.normal("The key **%s** has been set to **%s**", textChannel, args[0], args[1]);
+				MessageOutput.normal("The key **%s** has been set to **%s**.", textChannel, args[0], args[1]);
 			}
 			catch (NoSuchFieldException e) {
 				MessageOutput.normal("The key %s was not found.", textChannel, args[0]);
 			}
 			catch (ParseException e) {
-				MessageOutput.normal("The following value could not be parsed:\nKey: %s\nValue: %s\nVariable type: %s", textChannel, args[0], args[1], e.variableType);
+				MessageOutput.normal("The following value could not be parsed:\n\n**Key**: %s\n**Value**: %s\n**Variable type**: %s", textChannel, args[0], args[1], e.variableType);
 			}
 			catch (IllegalAccessException e) {
 				e.printStackTrace();
@@ -93,7 +89,7 @@ public class Settings extends Command {
 		}
 	}
 	
-	class Get extends Command {
+	public static class Get extends Command {
 		Get() {
 			super();
 			description = "List one or all of Erasmus' settings";
@@ -119,13 +115,13 @@ public class Settings extends Command {
 				MessageOutput.normal(output, textChannel);
 			}
 			else {
-				if (props.containsKey(args[0])) MessageOutput.normal(String.format("The value of **%s** is '**%s**'.", args[0], props.getProperty(args[0])), textChannel);
+				if (props.containsKey(args[0])) MessageOutput.normal(String.format("The value of **%s** is **%s**.", args[0], props.getProperty(args[0])), textChannel);
 				else MessageOutput.normal("The key %s was not found.", textChannel, args[0]);
 			}
 		}
 	}
 	
-	class Save extends Command {
+	public static class Save extends Command {
 		Save() {
 			super();
 			description = "Save Erasmus' settings from this session to the settings file";

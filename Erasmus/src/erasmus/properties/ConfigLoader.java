@@ -31,23 +31,27 @@ public class ConfigLoader {
 	}
 	
 	public static void loadProperties(Class<?> valuesClass) {
+		loadDefaults();
+		props = new Properties(defaultProps);
 		try {
-			loadDefaults();
-			props = new Properties(defaultProps);
 			FileInputStream input = new FileInputStream(FILENAME);
 			props.load(input);
 			input.close();
+		}
+		catch (FileNotFoundException e) {}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		try {
 			for (Field field: valuesClass.getDeclaredFields()) {
 				if (Modifier.isStatic(field.getModifiers()))
 					field.set(null, getValue(field.getName(), props.getProperty(field.getName()), field.getType()));
 			}
 		}
-		catch(ParseException e) {
-			
+		catch (ParseException e) {
+			MessageOutput.error("Could not convert **%s** to **%s**.", e.value, e.variableType);
 		}
-		catch (FileNotFoundException e) {
-		}
-		catch (IllegalAccessException | IOException e) {
+		catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}
 	}
@@ -90,13 +94,13 @@ public class ConfigLoader {
 	
 	private static void loadDefaults() {
 		defaultProps = new Properties();
-		defaultProps.setProperty("readEdits",  "true");
-		defaultProps.setProperty("infoTextChannelId", "281484833765588992");
-		defaultProps.setProperty("announcementsTextChannelId", "281492686844854272");
+		defaultProps.setProperty("readEdits", "true");
+		defaultProps.setProperty("infoTextChannelID", "281484833765588992");
+		defaultProps.setProperty("announcementsTextChannelID", "281492686844854272");
 		defaultProps.setProperty("updateStatsInterval", "10");
-		defaultProps.setProperty("guildId", "225743704533630986");
+		defaultProps.setProperty("guildID", "225743704533630986");
 		defaultProps.setProperty("prefix", "$");
-		defaultProps.setProperty("userId", "142046468151312384");
+		defaultProps.setProperty("userID", "142046468151312384");
 		defaultProps.setProperty("messageFormat", "%s");
 		defaultProps.setProperty("announcementFormat", "%s");
 	}
@@ -116,6 +120,5 @@ public class ConfigLoader {
 		Field field = Values.class.getField(key);
 		field.set(null, getValue(key, value, field.getType()));
 		props.setProperty(key, value);
-		MessageOutput.normal(String.format("The key **%s** was set to **%s**.", key, value), channel);
 	}
 }

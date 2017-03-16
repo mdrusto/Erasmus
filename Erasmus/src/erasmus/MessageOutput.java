@@ -22,12 +22,9 @@ public class MessageOutput {
 	}
 	
 	public static void info (String message, String... args) {
-		try {
-			infoChannel.sendMessage(String.format(Values.messageFormat, String.format(message, (Object[])args))).queue();
-		}
-		catch (NullPointerException e) {
-			System.out.println(message);
-		}
+		
+		if (infoChannel != null) infoChannel.sendMessage(String.format(Values.messageFormat, String.format(message, (Object[])args))).queue();
+		else System.out.println(message);
 	}
 	
 	public static void error (String message, String... args) {
@@ -37,7 +34,7 @@ public class MessageOutput {
 		catch (NullPointerException e) {
 			System.out.println(message);
 		}
-		Main.shutdown();
+		//ErasmusListener.shutdown();
 	}
 	
 	public static void announce (String message) {

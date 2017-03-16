@@ -1,6 +1,6 @@
 package erasmus.commands;
 
-import erasmus.Main;
+import erasmus.ErasmusListener;
 import net.dv8tion.jda.core.entities.TextChannel;
 
 public class No extends Command {
@@ -15,9 +15,9 @@ public class No extends Command {
 	@Override
 	public void called(String[] args, TextChannel textChannel) {
 		if (!checkArgs(args, textChannel)) return;
-		Main.choice = "no";
-		Main.currentCommand.called(Main.currentArgs, Main.currentTextChannel);
-		Main.removeResponse();
+		ErasmusListener.choice = "no";
+		ErasmusListener.currentCommand.called(ErasmusListener.currentArgs, ErasmusListener.currentTextChannel);
+		ErasmusListener.removeResponse();
 	}
 
 }

@@ -1,15 +1,17 @@
 package erasmus;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
-import javax.security.auth.login.LoginException;
+import org.reflections.Reflections;
 
 import erasmus.commands.*;
 import erasmus.properties.ConfigLoader;
 import erasmus.properties.Values;
-import net.dv8tion.jda.core.AccountType;
+import erasmus.ui.ErasmusWindow;
 import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.JDABuilder;
+import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Message;
@@ -20,51 +22,41 @@ import net.dv8tion.jda.core.events.ReadyEvent;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageUpdateEvent;
-import net.dv8tion.jda.core.exceptions.RateLimitedException;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
-public class Main extends ListenerAdapter {
+public class ErasmusListener extends ListenerAdapter {
 	
 	public static final ArrayList<Command> commands = new ArrayList<Command>();
+	
 	public static boolean isResponse = false;
 	
 	public static String choice;
 	
+	private ErasmusWindow gui;
+	
 	public static Command currentCommand;
 	public static String[] currentArgs;
 	public static TextChannel currentTextChannel;
-	
-	private static Help helpCommand;
-	private static Ping pingCommand;
-	private static Shutdown shutdownCommand;
-	private static Type typeCommand;
-	private static Settings settingsCommand;
-	private static Yes yesCommand;
-	private static No noCommand;
 		
-	public static JDA jda;
-	public static User user;
-	private static Guild guild;
-	private static MessageChannel infoChannel;
+	public JDA jda;
+	public User user;
+	private Guild guild;
+	private MessageChannel infoChannel;
 	
-	@SuppressWarnings("unused")
-	public static void main(String[] args) {
-		try {
-			JDA jda = new JDABuilder(AccountType.BOT)
-					.setToken("MjgxNTQ3Njk3MjcyNTIwNzA0.C4d2mQ.LFQCDLsBGGloN4nWdkLbtc8jDUI")
-					.addListener(new Main())
-					.setGame(Game.of("'" + Values.prefix + "help' for help"))
-					.buildBlocking();
-		}
-		catch (RateLimitedException | LoginException | InterruptedException e) {e.printStackTrace();}
+	public ErasmusListener(ErasmusWindow gui) {
+		this.gui = gui;
+	}
+	
+	public void setJDA(JDA jda) {
+		this.jda = jda;
 	}
 	
 	@Override
 	public void onReady(ReadyEvent event) {
-		jda = event.getJDA();
-		
 		ConfigLoader.loadProperties(Values.class);
-		
+
+		guild = jda.getGuildById(Values.guildID);
+				
 		user = jda.getUserById(Values.userID);
 		if (!user.hasPrivateChannel()) user.openPrivateChannel();
 		infoChannel = user.getPrivateChannel();
@@ -72,21 +64,26 @@ public class Main extends ListenerAdapter {
 		MessageOutput.setInfoChannel(infoChannel);
 		
 		infoChannel = guild.getTextChannelById(Values.infoTextChannelID);
-		if (infoChannel == null) MessageOutput.error("");
+		if (infoChannel == null) MessageOutput.error("Could not find info channel with id **%s**", Values.infoTextChannelID);
+		MessageOutput.setInfoChannel(infoChannel);
 		
-		helpCommand = new Help();
-		pingCommand = new Ping();
-		shutdownCommand = new Shutdown();
-		typeCommand = new Type();
-		settingsCommand = new Settings();
+		jda.getPresence().setGame(Game.of("'" + Values.prefix + "help' for help"));
+		jda.getPresence().setStatus(OnlineStatus.ONLINE);
+
 		
-		commands.add(helpCommand);
-		commands.add(pingCommand);
-		commands.add(shutdownCommand);
-		commands.add(typeCommand);
-		commands.add(settingsCommand);
+		Reflections r = new Reflections("erasmus.commands");
 		
-		MessageOutput.info("Started up successfully");
+		Set<Class<? extends Command>> classes = r.getSubTypesOf(Command.class);
+				
+		try {
+			for (Class<? extends Command> clazz: classes) {
+				if (!clazz.getSimpleName().equals("Yes") && !clazz.getSimpleName().equals("No") && !clazz.isMemberClass()) commands.add(clazz.newInstance());
+			}
+		}
+		catch (IllegalAccessException | InstantiationException e) {
+			e.printStackTrace();
+		}
+		throw new RuntimeException();
 	}
 	
 	@Override
@@ -96,7 +93,7 @@ public class Main extends ListenerAdapter {
 	}
 
 	@SuppressWarnings("unused")
-	public void commandCalled(Message message) {
+	public void commandCalled(Message message) {		
 		Guild guild = message.getGuild();
 		TextChannel textChannel = message.getTextChannel();
 		User author = message.getAuthor();
@@ -125,11 +122,10 @@ public class Main extends ListenerAdapter {
 		else {
 			args = new String[1];
 			args[0] = content;
-			
 		}
 		
 		Command finalCommand = null;
-		ArrayList<Command> currentList = commands;
+		List<Command> currentList = commands;
 		String[] newArgs = null;
 		int index = 0;
 		layersLoop: for (int d = 0; true; d++) {
@@ -157,7 +153,7 @@ public class Main extends ListenerAdapter {
 			break layersLoop;
 		}
 				
-		if (finalCommand == null) textChannel.sendMessage("```The command '" + content + "' was not recognized.```").queue();
+		if (finalCommand == null) MessageOutput.normal("The command **%s** was not recognized.", textChannel, content);
 		else {
 			int arrayLength = args.length - index - 1;
 			newArgs = new String[arrayLength];
@@ -174,26 +170,35 @@ public class Main extends ListenerAdapter {
 			
 			boolean isStillResponse = isResponse;
 			
-			if (!finalCommand.equals(yesCommand) && !finalCommand.equals(noCommand)) {
+			if (!finalCommand.getName().equals("yes") && !finalCommand.getName().equals("no")) {
 				currentCommand = finalCommand;
 				currentArgs = newArgs;
 				currentTextChannel = textChannel;
 				choice = "";
 			}
 			finalCommand.called(newArgs, textChannel);
-			if (isResponse && isStillResponse) removeResponse();
 		}
 	}
 
 	public static void addResponse() {
-		commands.add(yesCommand);
-		commands.add(noCommand);
+		Reflections reflections = new Reflections("erasmus");
+		Set<Class<? extends Command>> classes = reflections.getSubTypesOf(Command.class);
+
+		try {
+			for (Class<? extends Command> clazz: classes) {
+				if (clazz.getSimpleName().equals("Yes") || clazz.getSimpleName().equals("No")) commands.add(clazz.newInstance());
+			}
+		}
+		catch (IllegalAccessException | InstantiationException e) {
+			e.printStackTrace();
+		}
 		isResponse = true;
 	}
 	
 	public static void removeResponse() {
-		commands.remove(yesCommand);
-		commands.remove(noCommand);
+		for (Command command: commands) {
+			if (command.getName().equals("yes") || command.getName().equals("no")) commands.remove(command);
+		}
 		isResponse = false;
 	}
 	
@@ -205,11 +210,10 @@ public class Main extends ListenerAdapter {
 		if (Values.readEdits) commandCalled(event.getMessage());
 	}
 
-	public static void shutdown() {
+	public void shutdown() {
+		//MessageOutput.info("Shutting down");
 		ConfigLoader.saveProperties();
-		
-		MessageOutput.info("Shutting down");
-		
+		jda.getPresence().setStatus(OnlineStatus.OFFLINE);
 		jda.shutdownNow(false);
 	}
 }

@@ -1,8 +1,8 @@
 package erasmus.commands;
 
-import java.util.ArrayList;
+import java.util.List;
 
-import erasmus.Main;
+import erasmus.ErasmusListener;
 import erasmus.MessageOutput;
 import erasmus.properties.Values;
 import net.dv8tion.jda.core.entities.TextChannel;
@@ -23,27 +23,27 @@ public class Help extends Command {
 
 		String output = "";
 		if (args.length == 0) {
-			output += "=============== List of all my commands ===============\n\n";
-			for (int x = 0; x < Main.commands.size(); x++) {
-				Command command = Main.commands.get(x);
+			output += "**=============== List of all my commands ===============**\n\n";
+			for (int x = 0; x < ErasmusListener.commands.size(); x++) {
+				Command command = ErasmusListener.commands.get(x);
 				output += "**" + Values.prefix + command.getName() + "**" + " - " + command.getDescription() + "\n";
 			}
-			output += "\n=======================================================";
+			output += "\n**================================================**";
 		}
 		else {
-			ArrayList<Command> currentList = Main.commands;
+			List<Command> currentList = ErasmusListener.commands;
 			Command command = null;
 			layersLoop: for (int d = 0; true; d++) {
 				if (d >= args.length) break layersLoop;
-				for (int x = 0; x < currentList.size(); x++) {
-					if (args[d].equals(currentList.get(x).getName())) {
-						command = currentList.get(x);
+				for (Command cmd: currentList) {
+					if (args[d].equals(cmd.getName())) {
+						command = cmd;
 						currentList = command.getSubCommands();
 						continue layersLoop;
 					}
-					for (int c = 0; c < currentList.get(x).getAliases().size(); c++) {
-						if (args[d].equals(currentList.get(x).getAliases().get(c))) {
-							command = currentList.get(x);
+					for (String alias: cmd.getAliases()) {
+						if (args[d].equals(alias)) {
+							command = cmd;
 							currentList = command.getSubCommands();
 							continue layersLoop;
 						}
@@ -58,7 +58,7 @@ public class Help extends Command {
 					builder.append(args[x]);
 					if (x != args.length - 1) builder.append(" ");
 				}
-				output += "The command '" + builder.toString() + "' was not recognized.";
+				output += "The command **" + builder.toString() + "** was not recognized.";
 			}
 			else {
 				output += "**Command**: " + Values.prefix + command.getFullName() + "  |  **Aliases**: ";
