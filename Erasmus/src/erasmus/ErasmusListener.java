@@ -53,13 +53,19 @@ public class ErasmusListener extends ListenerAdapter {
 	
 	@Override
 	public void onReady(ReadyEvent event) {
+		jda = event.getJDA();
 		ConfigLoader.loadProperties(Values.class);
+		
+
 
 		guild = jda.getGuildById(Values.guildID);
-				
+		
 		user = jda.getUserById(Values.userID);
+
 		if (!user.hasPrivateChannel()) user.openPrivateChannel();
 		infoChannel = user.getPrivateChannel();
+		
+
 		
 		MessageOutput.setInfoChannel(infoChannel);
 		
@@ -83,7 +89,6 @@ public class ErasmusListener extends ListenerAdapter {
 		catch (IllegalAccessException | InstantiationException e) {
 			e.printStackTrace();
 		}
-		throw new RuntimeException();
 	}
 	
 	@Override
@@ -93,7 +98,7 @@ public class ErasmusListener extends ListenerAdapter {
 	}
 
 	@SuppressWarnings("unused")
-	public void commandCalled(Message message) {		
+	public void commandCalled(Message message) {
 		Guild guild = message.getGuild();
 		TextChannel textChannel = message.getTextChannel();
 		User author = message.getAuthor();

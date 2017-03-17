@@ -42,7 +42,7 @@ public class ErasmusEventManager implements IEventManager {
                 listener.onEvent(event);
             }
             catch (Throwable throwable) {
-                System.out.println("hi");
+                throwable.printStackTrace();
             }
         }
     }

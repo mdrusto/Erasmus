@@ -14,9 +14,9 @@ import net.dv8tion.jda.core.exceptions.RateLimitedException;
 public class ErasmusMain {
 	
 	
-	private static ErasmusListener listener;
+	public static ErasmusListener listener;
 	private static ErasmusWindow gui;
-	private static JDA jda;
+	public static JDA jda;
 	
 	public static void main(String[] args) {
 		try {
