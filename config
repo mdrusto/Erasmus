@@ -6,5 +6,5 @@ infoTextChannelId=281484833765588992
 userId=142046468151312384
 guildId=225743704533630986
 prefix=$
-updateSettingsInterval=10
+updateSettingsInterval=10 
 announcementsTextChannelId=281492686844854272
