@@ -45,7 +45,10 @@ public class ErasmusWindow extends JFrame {
 						.addComponent(icon)
 						.addComponent(runPanel)));
 		pack();
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+
 		try {
 			UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
 		}
