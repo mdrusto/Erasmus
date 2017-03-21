@@ -27,8 +27,11 @@ public class ErasmusMain {
 				}
 			});
 		}
-		catch (InvocationTargetException | InterruptedException e) {
-			
+		catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		catch(InvocationTargetException e) {
+			e.getTargetException().printStackTrace();
 		}
 		listener = new ErasmusListener(gui);
 		
@@ -44,5 +47,7 @@ public class ErasmusMain {
 		}
 		
 		listener.setJDA(jda);
+		
+		gui.loadGuilds();
 	}
 }

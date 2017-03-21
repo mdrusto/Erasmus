@@ -1,4 +1,4 @@
-package erasmus.ui;
+package erasmus.ui.infopanel;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ public class EntityDetailsPanel extends JPanel {
 
 	private static final long serialVersionUID = 8881086496966596033L;
 	
-	public <T> void setVisible(ISnowflake entity) {
+	public void setVisible(ISnowflake entity) {
 		List<String> details = new ArrayList<String>();
 		DateTimeFormatter format = DateTimeFormatter.BASIC_ISO_DATE;
 		

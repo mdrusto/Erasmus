@@ -56,8 +56,6 @@ public class ErasmusListener extends ListenerAdapter {
 		jda = event.getJDA();
 		ConfigLoader.loadProperties(Values.class);
 		
-
-
 		guild = jda.getGuildById(Values.guildID);
 		
 		user = jda.getUserById(Values.userID);
