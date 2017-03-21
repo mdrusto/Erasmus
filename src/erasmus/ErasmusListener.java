@@ -43,7 +43,7 @@ public class ErasmusListener extends ListenerAdapter {
 	private Guild guild;
 	private MessageChannel infoChannel;
 	
-	public ErasmusListener(ErasmusWindow gui) {
+	public ErasmusListener(ErasmusWindow  gui) {
 		this.gui = gui;
 	}
 	
