@@ -1,5 +1,6 @@
 package erasmus.ui.infopanel;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
@@ -22,7 +23,17 @@ public class TextChannelSelectorPanel extends JScrollPane {
 	public TextChannelSelectorPanel(InfoPanel container) {
 		this.container = container;
 		
-		setSize(210, 400);
+		Dimension d = new Dimension(200, 420);
+		
+		textChannelPanel.setMinimumSize(d);
+		textChannelPanel.setSize(d);
+		textChannelPanel.setMaximumSize(d);
+		textChannelPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		textChannelPanel.setVisible(true);
+		
+		setMinimumSize(d);
+		setSize(d);
+		setMaximumSize(d);
 		
 		setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_NEVER);
 		setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -43,7 +54,13 @@ public class TextChannelSelectorPanel extends JScrollPane {
 					container.textChannelSelected(channel);
 				}
 			});
-			button.setSize(100, 50);
+			
+			Dimension d = new Dimension(200, 50);
+			
+			button.setMinimumSize(d);
+			button.setSize(d);
+			button.setMaximumSize(d);
+			
 			button.setText(channel.getName());
 			
 			textChannelPanel.add(button);
@@ -52,5 +69,12 @@ public class TextChannelSelectorPanel extends JScrollPane {
 			button.setVisible(true);
 			placing++;
 		}
+		textChannelPanel.setVisible(true);
+		setVisible(true);
+	}
+	
+	public void hideThis() {
+		removeAll();
+		setVisible(false);
 	}
 }

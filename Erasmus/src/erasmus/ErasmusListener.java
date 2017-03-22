@@ -91,6 +91,7 @@ public class ErasmusListener extends ListenerAdapter {
 	
 	@Override
 	public void onMessageReceived(MessageReceivedEvent event) {
+		
 		if (!event.getMessage().getContent().startsWith(Values.prefix)) return;
 		commandCalled(event.getMessage());
 	}
@@ -210,6 +211,7 @@ public class ErasmusListener extends ListenerAdapter {
 	}
 	
 	public void onGuildMessageUpdate(GuildMessageUpdateEvent event) {
+		if (!event.getMessage().getContent().startsWith(Values.prefix)) return;
 		if (Values.readEdits) commandCalled(event.getMessage());
 	}
 

@@ -25,6 +25,7 @@ public class InfoPanel extends JPanel {
 		GroupLayout layout = new GroupLayout(this);
 		setLayout(layout);
 		
+		
 		guildSelector = new GuildSelectorPanel(this);
 		textChannelSelector = new TextChannelSelectorPanel(this);
 		channelPanel = new TextChannelPanel();
@@ -36,7 +37,7 @@ public class InfoPanel extends JPanel {
 		guildSelector.setLocation(0, 0);
 		guildSelector.setVisible(true);
 		
-		
+		channelPanel.setVisible(false);
 		
 		setVisible(true);
 	}
@@ -46,8 +47,8 @@ public class InfoPanel extends JPanel {
 	}
 	
 	public void textChannelSelected(TextChannel channel) {
-		guildSelector.setVisible(false);
-		textChannelSelector.setVisible(false);
+		guildSelector.hideThis();
+		textChannelSelector.hideThis();
 		
 		channelPanel.display(channel);
 	}
