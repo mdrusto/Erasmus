@@ -36,6 +36,7 @@ public class ErasmusWindow extends JFrame {
 		
 		layout.setHorizontalGroup(layout.createSequentialGroup()
 				.addComponent(infoPanel)
+				.addGap(100)
 				.addGroup(layout.createParallelGroup()
 						.addComponent(statusPanel)
 						.addComponent(icon)
@@ -43,6 +44,7 @@ public class ErasmusWindow extends JFrame {
 		
 		layout.setVerticalGroup(layout.createParallelGroup()
 				.addComponent(infoPanel)
+				.addGap(100)
 				.addGroup(layout.createSequentialGroup()
 						.addComponent(statusPanel)
 						.addComponent(icon)
