@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
@@ -18,37 +19,37 @@ public class MessagesPanel extends JPanel {
 	
 	private List<JLabel> messageLabels = new ArrayList<JLabel>();
 	
+	Dimension size = new Dimension(400, 380);
+	
 	public MessagesPanel() {
-		super();
-		Dimension d = new Dimension(400, 380);
+		super();		
+		setMinimumSize(size);
+		setSize(size);
+		setMaximumSize(size);
 		
-		setMinimumSize(d);
-		setSize(d);
-		setMaximumSize(d);
+		setLayout(null);
 	}
 	
 	public void display(TextChannel channel) {
 		try {
-			int placing = 16;
-			List<Message> reverse = new ArrayList<Message>();
-			List<Message> main = channel.getHistory().retrievePast(16).block();
-			for (Message message: main) {
-				reverse.add(0, message);
-			}
-			for (Message message: reverse) {
+			int placing = 1;
+		
+			for (Message message: channel.getHistory().retrievePast(18).block()) {
 				JLabel label = new JLabel();
 				label.setText(message.getAuthor().getName() + ": " + message.getContent());
-				Dimension d = new Dimension(400, 16);
-				label.setMinimumSize(d);
-				label.setSize(d);
-				label.setPreferredSize(d);
-				label.setMaximumSize(d);
+				Dimension labelSize = new Dimension(400, 16);
+				label.setMinimumSize(labelSize);
+				label.setSize(labelSize);
+				label.setPreferredSize(labelSize);
+				label.setMaximumSize(labelSize);
+				
 				messageLabels.add(label);
+				label.setLocation(0, (int)size.getHeight() - (int)labelSize.getHeight() * placing);
 				add(label);
-				label.setLocation(0, 16 * placing);
-				placing--;
+				placing++;
 				label.setHorizontalAlignment(SwingConstants.LEFT);
 			}
+			
 		}
 		catch (RateLimitedException e) {
 			e.printStackTrace();

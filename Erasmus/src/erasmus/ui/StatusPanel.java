@@ -1,5 +1,6 @@
 package erasmus.ui;
 
+import javax.swing.JButton;
 import javax.swing.JPanel;
 
 public class StatusPanel extends JPanel {
@@ -8,7 +9,11 @@ public class StatusPanel extends JPanel {
 	
 	public StatusPanel() {
 		super();
-		
+		JButton button = new JButton("Hi");
+		add(button);
+		setLayout(null);
+		button.setLocation(100, 50);
+		button.setVisible(true);
 		setSize(300, 60);
 	}
 	
