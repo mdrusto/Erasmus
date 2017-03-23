@@ -11,7 +11,7 @@ import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
 
-public class ErasmusMain {
+public class Erasmus {
 	
 	
 	public static ErasmusListener listener;
@@ -35,6 +35,14 @@ public class ErasmusMain {
 		}
 		listener = new ErasmusListener(gui);
 		
+		start();
+		
+		listener.setJDA(jda);
+		
+		gui.loadGuilds();
+	}
+	
+	public static void start() {
 		try {
 			jda = new JDABuilder(AccountType.BOT)
 					.setToken("MjgxNTQ3Njk3MjcyNTIwNzA0.C4d2mQ.LFQCDLsBGGloN4nWdkLbtc8jDUI")
@@ -45,9 +53,13 @@ public class ErasmusMain {
 		catch (RateLimitedException | LoginException | InterruptedException e) {
 			e.printStackTrace();
 		}
-		
-		listener.setJDA(jda);
-		
-		gui.loadGuilds();
+	}
+	
+	public static void stop() {
+		jda.shutdown(false);
+	}
+	
+	public static JDA getJDA() {
+		return jda;
 	}
 }

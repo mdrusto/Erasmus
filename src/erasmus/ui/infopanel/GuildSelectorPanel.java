@@ -20,22 +20,23 @@ public class GuildSelectorPanel extends JScrollPane {
 	private InfoPanel container;
 	
 	private JPanel guildsPanel = new JPanel();
-
+	
+	private Dimension size;
+	private Dimension buttonSize = new Dimension(200, 50);
+	
 	
 	public GuildSelectorPanel(InfoPanel container) {
 		this.container = container;
 		
-		Dimension d = new Dimension(200, 420);
-		
-		guildsPanel.setMinimumSize(d);
-		guildsPanel.setSize(d);
-		guildsPanel.setMaximumSize(d);
 		guildsPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		guildsPanel.setVisible(true);
 		
-		setMinimumSize(d);
-		setSize(d);
-		setMaximumSize(d);
+		size = new Dimension(container.getSize().width / 2, container.getSize().height);
+		
+		setMinimumSize(size);
+		setSize(size);
+		setPreferredSize(size);
+		setMaximumSize(size);
 		
 		setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_NEVER);
 		setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -55,12 +56,10 @@ public class GuildSelectorPanel extends JScrollPane {
 					container.guildSelected(guild);
 				}
 			});
-			
-			Dimension d = new Dimension(200, 50);
-			
-			button.setMinimumSize(d);
-			button.setSize(d);
-			button.setMaximumSize(d);
+						
+			button.setMinimumSize(buttonSize);
+			button.setSize(buttonSize);
+			button.setMaximumSize(buttonSize);
 			
 			button.setText(guild.getName());
 			

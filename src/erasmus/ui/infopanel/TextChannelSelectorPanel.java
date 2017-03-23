@@ -20,20 +20,20 @@ public class TextChannelSelectorPanel extends JScrollPane {
 	
 	JPanel textChannelPanel = new JPanel();
 	
+	Dimension size;
+	
 	public TextChannelSelectorPanel(InfoPanel container) {
 		this.container = container;
 		
-		Dimension d = new Dimension(200, 420);
+		size = new Dimension(container.getSize().width / 2, container.getSize().height);
 		
-		textChannelPanel.setMinimumSize(d);
-		textChannelPanel.setSize(d);
-		textChannelPanel.setMaximumSize(d);
 		textChannelPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		textChannelPanel.setVisible(true);
 		
-		setMinimumSize(d);
-		setSize(d);
-		setMaximumSize(d);
+		setMinimumSize(size);
+		setSize(size);
+		setPreferredSize(size);
+		setMaximumSize(size);
 		
 		setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_NEVER);
 		setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -42,9 +42,9 @@ public class TextChannelSelectorPanel extends JScrollPane {
 		setViewportView(textChannelPanel);
 	}
 	
-	public void display(List<TextChannel> channels) {
+	public void display(Guild guild) {
 		int placing = 0;
-		for (TextChannel channel: channels) {
+		for (TextChannel channel: guild.getTextChannels()) {
 			JButton button = new JButton();
 			this.channels.put(button, channel);
 			

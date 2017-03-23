@@ -1,8 +1,12 @@
 package erasmus.ui;
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.*;
+
+import erasmus.Erasmus;
 
 public class RunPanel extends JPanel {
 	
@@ -11,6 +15,10 @@ public class RunPanel extends JPanel {
 	private JButton startButton = new JButton();
 	private JButton stopButton = new JButton();
 	private JButton restartButton = new JButton();
+	
+	private Dimension startButtonSize = new Dimension(100, 60);
+	private Dimension stopButtonSize = new Dimension(100, 60);
+	private Dimension restartButtonSize = new Dimension(100, 60);
 	
 	public RunPanel() {
 		super();
@@ -27,23 +35,56 @@ public class RunPanel extends JPanel {
 				.addComponent(startButton)
 				.addComponent(stopButton)
 				.addComponent(restartButton));
+		
 		setSize(300, 60);
-		startButton.setMinimumSize(new Dimension(100, 60));
-		startButton.setSize(100, 60);
-		startButton.setMaximumSize(new Dimension(100, 60));
+		
+		startButton.setMinimumSize(startButtonSize);
+		startButton.setSize(startButtonSize);
+		startButton.setPreferredSize(startButtonSize);
+		startButton.setMaximumSize(startButtonSize);
 		startButton.setText("Start");
 		startButton.setFocusable(false);
-		stopButton.setMinimumSize(new Dimension(100, 60));
-		stopButton.setSize(100, 60);
-		stopButton.setMaximumSize(new Dimension(100, 60));
+		startButton.setEnabled(false);
+		
+		stopButton.setMinimumSize(stopButtonSize);
+		stopButton.setSize(stopButtonSize);
+		stopButton.setPreferredSize(stopButtonSize);
+		stopButton.setMaximumSize(stopButtonSize);
 		stopButton.setText("Stop");
 		stopButton.setFocusable(false);
-		restartButton.setMinimumSize(new Dimension(100, 60));
-		restartButton.setSize(100, 60);
-		restartButton.setMaximumSize(new Dimension(100, 60));
+		
+		restartButton.setMinimumSize(restartButtonSize);
+		restartButton.setSize(restartButtonSize);
+		restartButton.setMaximumSize(restartButtonSize);
+		restartButton.setMaximumSize(restartButtonSize);
 		restartButton.setText("Restart");
 		restartButton.setFocusable(false);
-
+		
+		startButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				Erasmus.start();
+				switchStates(true);
+			}
+		});
+		stopButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				Erasmus.stop();
+				switchStates(false);
+			}
+		});
+		restartButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				Erasmus.stop();
+				switchStates(false);
+				
+				Erasmus.start();
+				switchStates(true);
+			}
+		});
+		
 	}
 	
 	public JButton getStartButton() {

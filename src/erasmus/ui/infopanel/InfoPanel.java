@@ -5,7 +5,7 @@ import java.awt.Dimension;
 import javax.swing.GroupLayout;
 import javax.swing.JPanel;
 
-import erasmus.ErasmusMain;
+import erasmus.Erasmus;
 import net.dv8tion.jda.core.entities.*;
 
 public class InfoPanel extends JPanel {
@@ -16,15 +16,15 @@ public class InfoPanel extends JPanel {
 	TextChannelSelectorPanel textChannelSelector;
 	TextChannelPanel channelPanel;
 	
+	private Dimension size = new Dimension(800, 800);
+	
 	public InfoPanel() {
-		//super();
-		setMinimumSize(new Dimension(400, 420));
-		setSize(400, 420);
-		setMaximumSize(new Dimension(400, 420));
+		setMinimumSize(size);
+		setPreferredSize(size);
+		setSize(size);
+		setMaximumSize(size);
 		
-		GroupLayout layout = new GroupLayout(this);
-		setLayout(layout);
-		
+		setLayout(null);
 		
 		guildSelector = new GuildSelectorPanel(this);
 		textChannelSelector = new TextChannelSelectorPanel(this);
@@ -43,7 +43,7 @@ public class InfoPanel extends JPanel {
 	}
 	public void guildSelected(Guild guild) {
 		textChannelSelector.setLocation(200, 0);
-		textChannelSelector.display(guild.getTextChannels());
+		textChannelSelector.display(guild);
 	}
 	
 	public void textChannelSelected(TextChannel channel) {

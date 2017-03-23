@@ -2,7 +2,7 @@ package erasmus.ui;
 
 import javax.swing.*;
 
-import erasmus.ErasmusMain;
+import erasmus.Erasmus;
 import erasmus.ui.infopanel.InfoPanel;
 
 public class ErasmusWindow extends JFrame {
@@ -63,7 +63,7 @@ public class ErasmusWindow extends JFrame {
 	}
 	
 	public void loadGuilds() {
-		infoPanel.guildSelector.display(ErasmusMain.jda.getGuilds());
+		infoPanel.guildSelector.display(Erasmus.jda.getGuilds());
 	}
 	
 	public Status getStatus() {
