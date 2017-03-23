@@ -24,8 +24,6 @@ public class RunPanel extends JPanel {
 		super();
 		GroupLayout layout = new GroupLayout(this);
 		setLayout(layout);
-		layout.setAutoCreateGaps(false);
-		layout.setAutoCreateContainerGaps(false);
 		
 		layout.setHorizontalGroup(layout.createSequentialGroup()
 				.addComponent(startButton)
@@ -36,7 +34,6 @@ public class RunPanel extends JPanel {
 				.addComponent(stopButton)
 				.addComponent(restartButton));
 		
-		setSize(300, 60);
 		
 		startButton.setMinimumSize(startButtonSize);
 		startButton.setSize(startButtonSize);

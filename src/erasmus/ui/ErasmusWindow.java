@@ -8,12 +8,10 @@ import erasmus.ui.infopanel.InfoPanel;
 public class ErasmusWindow extends JFrame {
 
 	private static final long serialVersionUID = 2334807590779291894L;
-	
-	private Status status = Status.OFFLINE;
-	
+		
 	//MARK JPanels
 	private InfoPanel infoPanel = new InfoPanel();
-	private StatusPanel statusPanel = new StatusPanel();
+	public StatusPanel statusPanel = new StatusPanel();
 	private RunPanel runPanel = new RunPanel();
 	
 	
@@ -64,28 +62,5 @@ public class ErasmusWindow extends JFrame {
 	
 	public void loadGuilds() {
 		infoPanel.guildSelector.display(Erasmus.jda.getGuilds());
-	}
-	
-	public Status getStatus() {
-		return status;
-	}
-	
-	public static enum Status {
-		
-		ERROR(-1),
-		
-		OFFLINE(0),
-		
-		ONLINE(1);
-		
-		int number;
-
-		Status(int n) {
-			this.number = n;
-		}
-		
-		public int getNumber() {
-			return number;
-		}
 	}
 }
