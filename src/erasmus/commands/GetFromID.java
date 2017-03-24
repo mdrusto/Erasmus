@@ -47,7 +47,7 @@ public class GetFromID extends Command {
 			}
 		}
 		else if (args[0].equalsIgnoreCase("user")) {
-			User user = Erasmus.jda.getUserById(args[1]);
+			User user = jda.getUserById(args[1]);
 			if (user == null) MessageOutput.normal("No user found with id **%s**", textChannel, args[1]);
 			else {
 				details.add("**User ID**: `" + args[1] + "`\n----------");

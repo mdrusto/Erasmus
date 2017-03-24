@@ -19,11 +19,12 @@ public class MessagesPanel extends JPanel {
 	
 	private List<JLabel> messageLabels = new ArrayList<JLabel>();
 	
-	private Dimension size = new Dimension(400, 380);
-	private Dimension labelSize = new Dimension(400, 30);
+	private Dimension size;
+	private Dimension labelSize = new Dimension(600, 30);
 	
-	public MessagesPanel() {
-		super();		
+	public MessagesPanel(TextChannelPanel container) {
+		super();
+		size = new Dimension(container.size.width, container.size.height - container.buttonSize.height);
 		setMinimumSize(size);
 		setPreferredSize(size);
 		setSize(size);
@@ -33,6 +34,7 @@ public class MessagesPanel extends JPanel {
 	}
 	
 	public void display(TextChannel channel) {
+		removeAll();
 		try {
 			int placing = 1;
 		
@@ -46,7 +48,6 @@ public class MessagesPanel extends JPanel {
 				placing++;
 				label.setHorizontalAlignment(SwingConstants.LEFT);
 			}
-			
 		}
 		catch (RateLimitedException e) {
 			e.printStackTrace();

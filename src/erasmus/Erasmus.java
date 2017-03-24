@@ -18,7 +18,7 @@ public class Erasmus {
 	
 	public static ErasmusListener listener;
 	private static ErasmusWindow gui;
-	public static JDA jda;
+	private static JDA jda;
 	
 	public static void main(String[] args) {
 		try {
@@ -83,6 +83,7 @@ public class Erasmus {
 				gui.statusPanel.setStatus(Status.OFFLINE, true);
 			}
 		};
+		worker.execute();
 	}
 	
 	public static JDA getJDA() {

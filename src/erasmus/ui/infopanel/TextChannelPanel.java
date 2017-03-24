@@ -16,22 +16,29 @@ public class TextChannelPanel extends JPanel {
 	
 	JTextField messageField = new JTextField();
 	JButton sendButton = new JButton();
-	MessagesPanel messagesPanel = new MessagesPanel();
+	MessagesPanel messagesPanel;
+	
+	public Dimension size = new Dimension(600, 800);
+	
+	public Dimension buttonSize = new Dimension(80, 40);
 	
 	public TextChannelPanel() {
 		super();
 		
+		messagesPanel = new MessagesPanel(this);
+		
 		sendButton.setText("Send");
 		
-		Dimension d = new Dimension(80, 40);
-		sendButton.setMinimumSize(d);
-		sendButton.setSize(d);
-		sendButton.setMaximumSize(d);
+		sendButton.setMinimumSize(buttonSize);
+		sendButton.setSize(buttonSize);
+		sendButton.setPreferredSize(buttonSize);
+		sendButton.setMaximumSize(buttonSize);
 		
-		Dimension newD = new Dimension(320, 40);
-		messageField.setMinimumSize(newD);
-		messageField.setSize(newD);
-		messageField.setMaximumSize(newD);
+		Dimension messageFieldSize = new Dimension(size.width - buttonSize.width, buttonSize.height);
+		messageField.setMinimumSize(messageFieldSize);
+		messageField.setSize(messageFieldSize);
+		messageField.setPreferredSize(messageFieldSize);
+		messageField.setMaximumSize(messageFieldSize);
 		
 		messagesPanel.setVisible(true);
 		messageField.setVisible(true);
@@ -50,15 +57,13 @@ public class TextChannelPanel extends JPanel {
 				.addGroup(layout.createParallelGroup()
 						.addComponent(messageField)
 						.addComponent(sendButton)));
-		Dimension dd = new Dimension(400, 820);
-		setMinimumSize(dd);
-		setSize(dd);
-		setPreferredSize(dd);
-		setMaximumSize(dd);
+		setMinimumSize(size);
+		setSize(size);
+		setPreferredSize(size);
+		setMaximumSize(size);
 	}
 	
 	public void display(TextChannel channel) {
-		
 		sendButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {

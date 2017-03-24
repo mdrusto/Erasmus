@@ -3,6 +3,7 @@ package erasmus.ui.infopanel;
 import java.awt.Dimension;
 
 import javax.swing.GroupLayout;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import erasmus.Erasmus;
@@ -41,6 +42,7 @@ public class InfoPanel extends JPanel {
 		
 		setVisible(true);
 	}
+	
 	public void guildSelected(Guild guild) {
 		textChannelSelector.setLocation(200, 0);
 		textChannelSelector.display(guild);
@@ -48,7 +50,8 @@ public class InfoPanel extends JPanel {
 	
 	public void textChannelSelected(TextChannel channel) {
 		guildSelector.hideThis();
-		textChannelSelector.hideThis();
+		textChannelSelector.setLocation(0, 0);
+		channelPanel.setLocation(200, 0);
 		
 		channelPanel.display(channel);
 	}

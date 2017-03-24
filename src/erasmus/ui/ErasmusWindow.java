@@ -1,5 +1,8 @@
 package erasmus.ui;
 
+import java.awt.Color;
+import java.awt.Dimension;
+
 import javax.swing.*;
 
 import erasmus.Erasmus;
@@ -45,9 +48,11 @@ public class ErasmusWindow extends JFrame {
 				.addGap(100)
 				.addGroup(layout.createSequentialGroup()
 						.addComponent(statusPanel)
+						.addGap(360)
 						.addComponent(icon)
 						.addComponent(runPanel)));
 		pack();
+		getContentPane().setBackground(new Color(40, 40, 40));
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		try {
 			UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
@@ -56,11 +61,11 @@ public class ErasmusWindow extends JFrame {
 			e.printStackTrace();
 		}
 		setVisible(true);
-		setIconImage(new ImageIcon("erasmus_icon.png").getImage());
+		setIconImage(new ImageIcon("resources/img/erasmus_icon.png").getImage());
 		setTitle("Erasmus v0.0.1");
 	}
 	
 	public void loadGuilds() {
-		infoPanel.guildSelector.display(Erasmus.jda.getGuilds());
+		infoPanel.guildSelector.display(Erasmus.getJDA().getGuilds());
 	}
 }

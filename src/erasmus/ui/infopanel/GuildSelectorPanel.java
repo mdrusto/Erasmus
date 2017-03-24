@@ -31,12 +31,14 @@ public class GuildSelectorPanel extends JScrollPane {
 		guildsPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		guildsPanel.setVisible(true);
 		
-		size = new Dimension(container.getSize().width / 2, container.getSize().height);
+		size = new Dimension(container.getSize().width / 4, container.getSize().height);
 		
 		setMinimumSize(size);
 		setSize(size);
 		setPreferredSize(size);
 		setMaximumSize(size);
+		
+		guildsPanel.setLayout(new BoxLayout(guildsPanel, BoxLayout.Y_AXIS));
 		
 		setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_NEVER);
 		setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -63,8 +65,9 @@ public class GuildSelectorPanel extends JScrollPane {
 			
 			button.setText(guild.getName());
 			
+			button.setFocusable(false);
+			
 			guildsPanel.add(button);
-			button.setLocation(0, 50 * placing);
 			
 			button.setVisible(true);
 			placing++;

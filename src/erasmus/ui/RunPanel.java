@@ -16,24 +16,29 @@ public class RunPanel extends JPanel {
 	private JButton stopButton = new JButton();
 	private JButton restartButton = new JButton();
 	
-	private Dimension startButtonSize = new Dimension(100, 60);
-	private Dimension stopButtonSize = new Dimension(100, 60);
-	private Dimension restartButtonSize = new Dimension(100, 60);
+	private Dimension startButtonSize = new Dimension(100, 40);
+	private Dimension stopButtonSize = new Dimension(100, 40);
+	private Dimension restartButtonSize = new Dimension(100, 40);
+	
+	private Dimension size = new Dimension(300, 60);
 	
 	public RunPanel() {
 		super();
 		GroupLayout layout = new GroupLayout(this);
 		setLayout(layout);
 		
-		layout.setHorizontalGroup(layout.createSequentialGroup()
+		layout.setHorizontalGroup(layout.createParallelGroup()
+				.addGap(20)
+				.addGroup(layout.createSequentialGroup()
 				.addComponent(startButton)
 				.addComponent(stopButton)
-				.addComponent(restartButton));
-		layout.setVerticalGroup(layout.createParallelGroup()
+				.addComponent(restartButton)));
+		layout.setVerticalGroup(layout.createSequentialGroup()
+				.addGap(20)
+				.addGroup(layout.createParallelGroup()
 				.addComponent(startButton)
 				.addComponent(stopButton)
-				.addComponent(restartButton));
-		
+				.addComponent(restartButton)));
 		
 		startButton.setMinimumSize(startButtonSize);
 		startButton.setSize(startButtonSize);
@@ -81,7 +86,6 @@ public class RunPanel extends JPanel {
 				switchStates(true);
 			}
 		});
-		
 	}
 	
 	public JButton getStartButton() {
