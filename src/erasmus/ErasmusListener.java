@@ -218,6 +218,6 @@ public class ErasmusListener extends ListenerAdapter {
 		//MessageOutput.info("Shutting down");
 		ConfigLoader.saveProperties();
 		jda.getPresence().setStatus(OnlineStatus.OFFLINE);
-		jda.shutdownNow(false);
+		jda.shutdown(false);
 	}
 }

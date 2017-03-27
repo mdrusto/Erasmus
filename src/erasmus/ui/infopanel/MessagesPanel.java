@@ -35,24 +35,17 @@ public class MessagesPanel extends JPanel {
 	
 	public void display(TextChannel channel) {
 		removeAll();
-		try {
-			int placing = 1;
-		
-			for (Message message: channel.getHistory().retrievePast(18).complete()) {
-				JLabel label = new JLabel();
-				label.setText("<html>" + message.getAuthor().getName() + ": " + message.getContent() + "</html>");
-				label.setSize(labelSize);
-				messageLabels.add(label);
-				label.setLocation(0, (int)size.getHeight() - (int)labelSize.getHeight() * placing);
-				add(label);
-				placing++;
-				label.setHorizontalAlignment(SwingConstants.LEFT);
-			}
-		}
-		catch (RateLimitedException e) {
-			e.printStackTrace();
-		}
-		
-	}
+		int placing = 1;
 	
+		for (Message message: channel.getHistory().retrievePast(18).complete()) {
+			JLabel label = new JLabel();
+			label.setText("<html>" + message.getAuthor().getName() + ": " + message.getContent() + "</html>");
+			label.setSize(labelSize);
+			messageLabels.add(label);
+			label.setLocation(0, (int)size.getHeight() - (int)labelSize.getHeight() * placing);
+			add(label);
+			placing++;
+			label.setHorizontalAlignment(SwingConstants.LEFT);
+		}
+	}
 }
