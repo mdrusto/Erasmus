@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import erasmus.Erasmus;
+import erasmus.ErasmusBot;
 
 public class StatusPanel extends JPanel {
 	
@@ -41,7 +42,7 @@ public class StatusPanel extends JPanel {
 		
 		setBorder(BorderFactory.createLineBorder(Color.BLACK));
 	}
-	public void setStatus(Erasmus.Status status, boolean done) {
+	public void setStatus(ErasmusBot.Status status, boolean done) {
 		switch(status) {
 			case ONLINE:
 			if (!done) label.setIcon(loadingIcon);

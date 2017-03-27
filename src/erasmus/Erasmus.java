@@ -12,13 +12,14 @@ import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
 
+import erasmus.ErasmusBot.Status;
+
 public class Erasmus {
-	
-	private static Status status;
-	
+		
 	public static ErasmusListener listener;
 	private static ErasmusUI gui;
 	private static JDA jda;
+	private static ErasmusBot bot = new ErasmusBot();
 	
 	public static void main(String[] args) {
 		try {
@@ -42,15 +43,11 @@ public class Erasmus {
 	
 	public static void start() {
 		gui.statusPanel.setStatus(Status.ONLINE, false);
-		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+		new SwingWorker<Void, Void>() {
 			@Override
 			public Void doInBackground() {
 				try {
-					jda = new JDABuilder(AccountType.BOT)
-							.setToken("MjgxNTQ3Njk3MjcyNTIwNzA0.C4d2mQ.LFQCDLsBGGloN4nWdkLbtc8jDUI")
-							.addListener(listener)
-							.setEventManager(new ErasmusEventManager())
-							.buildBlocking();
+					bot.start();
 				}
 				catch (RateLimitedException | LoginException | InterruptedException e) {
 					e.printStackTrace();
@@ -60,56 +57,31 @@ public class Erasmus {
 			
 			@Override
 			public void done() {
-				status = Status.ONLINE;
 				gui.statusPanel.setStatus(Status.ONLINE, true);
 				gui.loadGuilds();
 			}
-		};
-		worker.execute();
+		}.execute();
 		
 	}
 	
 	public static void stop() {
 		gui.statusPanel.setStatus(Status.OFFLINE, false);
-		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+		new SwingWorker<Void, Void>() {
 			@Override
 			public Void doInBackground() {
-				jda.shutdown(false);
+				bot.stop();
 				return null;
 			}
 			@Override
 			public void done() {
-				status = Status.OFFLINE;
 				gui.statusPanel.setStatus(Status.OFFLINE, true);
 			}
-		};
-		worker.execute();
+		}.execute();
 	}
 	
 	public static JDA getJDA() {
 		return jda;
 	}
-	
-	public Status getStatus() {
-		return status;
-	}
-	
-	public static enum Status {
-		
-		ERROR(-1),
-		
-		OFFLINE(0),
-		
-		ONLINE(1);
-		
-		int id;
 
-		Status(int n) {
-			this.id = n;
-		}
-		
-		public int getID() {
-			return id;
-		}
-	}
+
 }
