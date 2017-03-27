@@ -2,6 +2,8 @@ package erasmus.commands;
 
 import erasmus.ErasmusMain;
 import net.dv8tion.jda.core.entities.TextChannel;
+import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.managers.RoleManagerUpdatable;
 
 public class Shutdown extends Command {
 	
@@ -13,8 +15,8 @@ public class Shutdown extends Command {
 		maxArgs = 0;
 	}
 	@Override
-	public void called(String[] args, TextChannel textChannel) {
-		if (!checkArgs(args, textChannel)) return;
+	public void called(String[] args, TextChannel textChannel, User author) {
+		if (!checkArgs(args, textChannel, author)) return;
 		ErasmusMain.listener.shutdown();
 	}
 }

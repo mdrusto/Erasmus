@@ -2,6 +2,9 @@ package erasmus.ui;
 
 import javax.swing.*;
 
+import erasmus.ErasmusMain;
+import erasmus.ui.infopanel.InfoPanel;
+
 public class ErasmusWindow extends JFrame {
 
 	private static final long serialVersionUID = 2334807590779291894L;
@@ -9,7 +12,7 @@ public class ErasmusWindow extends JFrame {
 	private Status status = Status.OFFLINE;
 	
 	//MARK JPanels
-	private ServerPanel channelView = new ServerPanel();
+	private InfoPanel infoPanel = new InfoPanel();
 	private StatusPanel statusPanel = new StatusPanel();
 	private RunPanel runPanel = new RunPanel();
 	
@@ -19,7 +22,7 @@ public class ErasmusWindow extends JFrame {
 	
 	
 	//MARK JTextFields
-
+	
 	
 	//MARK JLabels
 	private Icon icon = new Icon();
@@ -32,23 +35,20 @@ public class ErasmusWindow extends JFrame {
 		layout.setAutoCreateGaps(false);
 		
 		layout.setHorizontalGroup(layout.createSequentialGroup()
-				.addComponent(channelView)
+				.addComponent(infoPanel)
 				.addGroup(layout.createParallelGroup()
 						.addComponent(statusPanel)
 						.addComponent(icon)
 						.addComponent(runPanel)));
 		
 		layout.setVerticalGroup(layout.createParallelGroup()
-				.addComponent(channelView)
+				.addComponent(infoPanel)
 				.addGroup(layout.createSequentialGroup()
 						.addComponent(statusPanel)
 						.addComponent(icon)
 						.addComponent(runPanel)));
 		pack();
-
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		try {
 			UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
 		}
@@ -58,6 +58,10 @@ public class ErasmusWindow extends JFrame {
 		setVisible(true);
 		setIconImage(new ImageIcon("erasmus_icon.png").getImage());
 		setTitle("Erasmus v0.0.1");
+	}
+	
+	public void loadGuilds() {
+		infoPanel.guildSelector.display(ErasmusMain.jda.getGuilds());
 	}
 	
 	public Status getStatus() {

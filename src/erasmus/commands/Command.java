@@ -5,7 +5,13 @@ import java.util.List;
 
 import erasmus.MessageOutput;
 import erasmus.properties.Values;
+import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.TextChannel;
+import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.core.managers.RoleManagerUpdatable;
+import net.dv8tion.jda.core.requests.RestAction;
+
 
 public abstract class Command {
 	public boolean ignoreCase = true;
@@ -17,6 +23,7 @@ public abstract class Command {
 	public List<String> aliases = new ArrayList<String>();
 	public List<Command> subCommands = new ArrayList<Command>();
 	public String usage = Values.prefix + fullName;
+	
 	
 	public Command() {
 		Class<?>[] classes = this.getClass().getClasses();
@@ -30,6 +37,14 @@ public abstract class Command {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	public String getData(){
+		return null;
+		
+		
+	}
+	
 	
 	public String getUsage() {
 		return usage;
@@ -49,7 +64,7 @@ public abstract class Command {
 	public List<Command> getSubCommands() {
 		return subCommands;
 		}
-	public boolean checkArgs (String[] args, TextChannel textChannel) {
+	public boolean checkArgs (String[] args, TextChannel textChannel, User author) {
 		if (maxArgs != -1 && args.length > maxArgs) {
 			MessageOutput.normal("A maximum of **%s** arguments are permitted for the **$%s** command.\nUsage: **%s**", textChannel, String.valueOf(maxArgs), getFullName(), getUsage());
 			return false;
@@ -60,8 +75,17 @@ public abstract class Command {
 		}
 		return true;
 	}
-	public abstract void called(String[] args, TextChannel textChannel);
+	public abstract void called(String[] args, TextChannel textChannel, User author);
 	public void addAlias(String alias) {
 		aliases.add(alias);
 		}
-}
+
+
+	public void called(String[] newArgs, TextChannel textChannel, Object r) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
+		
+	}

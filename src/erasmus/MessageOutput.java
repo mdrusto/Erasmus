@@ -40,4 +40,7 @@ public class MessageOutput {
 	public static void announce (String message) {
 		announcementsChannel.sendMessage(String.format(Values.messageFormat, message));
 	}
-}
+
+	
+	}
+

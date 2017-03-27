@@ -6,6 +6,8 @@ import erasmus.ErasmusListener;
 import erasmus.MessageOutput;
 import erasmus.properties.Values;
 import net.dv8tion.jda.core.entities.TextChannel;
+import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.managers.RoleManagerUpdatable;
 
 public class Help extends Command {
 	
@@ -18,8 +20,8 @@ public class Help extends Command {
 	}
 	
 	@Override
-	public void called(String[] args, TextChannel textChannel) {
-		if (!checkArgs(args, textChannel)) return;
+	public void called(String[] args, TextChannel textChannel, User author) {
+		if (!checkArgs(args, textChannel, author)) return;
 
 		String output = "";
 		if (args.length == 0) {

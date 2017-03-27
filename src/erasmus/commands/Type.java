@@ -1,6 +1,8 @@
 package erasmus.commands;
 
 import net.dv8tion.jda.core.entities.TextChannel;
+import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.managers.RoleManagerUpdatable;
 
 public class Type extends Command {
 	public Type () {
@@ -11,8 +13,8 @@ public class Type extends Command {
 	}
 	
 	@Override
-	public void called (String[] args, TextChannel textChannel) {
-		if (!checkArgs(args, textChannel)) return;
+	public void called (String[] args, TextChannel textChannel, User author) {
+		if (!checkArgs(args, textChannel, author)) return;
 		textChannel.sendTyping().queue();
 	}
 }

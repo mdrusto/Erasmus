@@ -23,6 +23,7 @@ import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageUpdateEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import net.dv8tion.jda.core.managers.RoleManagerUpdatable;
 
 public class ErasmusListener extends ListenerAdapter {
 	
@@ -43,7 +44,7 @@ public class ErasmusListener extends ListenerAdapter {
 	private Guild guild;
 	private MessageChannel infoChannel;
 	
-	public ErasmusListener(ErasmusWindow  gui) {
+	public ErasmusListener(ErasmusWindow gui) {
 		this.gui = gui;
 	}
 	
@@ -56,8 +57,6 @@ public class ErasmusListener extends ListenerAdapter {
 		jda = event.getJDA();
 		ConfigLoader.loadProperties(Values.class);
 		
-
-
 		guild = jda.getGuildById(Values.guildID);
 		
 		user = jda.getUserById(Values.userID);
@@ -93,6 +92,7 @@ public class ErasmusListener extends ListenerAdapter {
 	
 	@Override
 	public void onMessageReceived(MessageReceivedEvent event) {
+		
 		if (!event.getMessage().getContent().startsWith(Values.prefix)) return;
 		commandCalled(event.getMessage());
 	}
@@ -181,7 +181,7 @@ public class ErasmusListener extends ListenerAdapter {
 				currentTextChannel = textChannel;
 				choice = "";
 			}
-			finalCommand.called(newArgs, textChannel);
+			finalCommand.called(newArgs, textChannel, author);
 		}
 	}
 
@@ -212,6 +212,7 @@ public class ErasmusListener extends ListenerAdapter {
 	}
 	
 	public void onGuildMessageUpdate(GuildMessageUpdateEvent event) {
+		if (!event.getMessage().getContent().startsWith(Values.prefix)) return;
 		if (Values.readEdits) commandCalled(event.getMessage());
 	}
 

@@ -9,6 +9,8 @@ import erasmus.properties.ConfigLoader;
 import erasmus.properties.ParseException;
 import erasmus.properties.Values;
 import net.dv8tion.jda.core.entities.TextChannel;
+import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.managers.RoleManagerUpdatable;
 
 public class Settings extends Command {
 	
@@ -28,8 +30,8 @@ public class Settings extends Command {
 	}
 	
 	@Override
-	public void called(String[] args, TextChannel textChannel) {
-		if (!checkArgs(args, textChannel)) return;
+	public void called(String[] args, TextChannel textChannel, User author) {
+		if (!checkArgs(args, textChannel, author)) return;
 		
 	}
 	
@@ -43,8 +45,8 @@ public class Settings extends Command {
 		}
 
 		@Override
-		public void called(String[] args, TextChannel textChannel) {
-			if (!checkArgs(args, textChannel)) return;
+		public void called(String[] args, TextChannel textChannel, User author) {
+			if (!checkArgs(args, textChannel, author)) return;
 			if (!ErasmusListener.isResponse) {
 				ErasmusListener.addResponse();
 				MessageOutput.normal("Are you sure you want to reset the settings?\nType **%syes** or **%sno**", textChannel, Values.prefix, Values.prefix);
@@ -71,8 +73,8 @@ public class Settings extends Command {
 		}
 
 		@Override
-		public void called(String[] args, TextChannel textChannel) {
-			if (!checkArgs(args, textChannel)) return;
+		public void called(String[] args, TextChannel textChannel, User author) {
+			if (!checkArgs(args, textChannel, author)) return;
 			try {
 				ConfigLoader.setProperty(args[0], args[1], textChannel);
 				MessageOutput.normal("The key **%s** has been set to **%s**.", textChannel, args[0], args[1]);
@@ -100,8 +102,8 @@ public class Settings extends Command {
 		
 		@Override
 		@SuppressWarnings("rawtypes")
-		public void called(String[] args, TextChannel textChannel) {
-			if (!checkArgs(args, textChannel)) return;
+		public void called(String[] args, TextChannel textChannel, User author) {
+			if (!checkArgs(args, textChannel, author)) return;
 			
 			Properties props = ConfigLoader.getProperties();
 			if (args.length == 0) {
@@ -130,8 +132,8 @@ public class Settings extends Command {
 		}
 		
 		@Override
-		public void called(String[] args, TextChannel textChannel) {
-			if (!checkArgs(args, textChannel)) return;
+		public void called(String[] args, TextChannel textChannel,User author) {
+			if (!checkArgs(args, textChannel, author)) return;
 			ConfigLoader.saveProperties();
 			MessageOutput.normal("Erasmus' settings have been saved.", textChannel);
 		}
