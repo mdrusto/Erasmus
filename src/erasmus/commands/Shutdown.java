@@ -1,6 +1,6 @@
 package erasmus.commands;
 
-import erasmus.ErasmusMain;
+import erasmus.Erasmus;
 import net.dv8tion.jda.core.entities.TextChannel;
 
 public class Shutdown extends Command {
@@ -15,6 +15,6 @@ public class Shutdown extends Command {
 	@Override
 	public void called(String[] args, TextChannel textChannel) {
 		if (!checkArgs(args, textChannel)) return;
-		ErasmusMain.listener.shutdown();
+		Erasmus.listener.shutdown();
 	}
 }

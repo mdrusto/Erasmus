@@ -91,7 +91,6 @@ public class ErasmusListener extends ListenerAdapter {
 	
 	@Override
 	public void onMessageReceived(MessageReceivedEvent event) {
-		
 		if (!event.getMessage().getContent().startsWith(Values.prefix)) return;
 		commandCalled(event.getMessage());
 	}

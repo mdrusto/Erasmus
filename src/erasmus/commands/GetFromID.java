@@ -3,7 +3,7 @@ package erasmus.commands;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-import erasmus.ErasmusMain;
+import erasmus.Erasmus;
 import erasmus.MessageOutput;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.*;
@@ -47,7 +47,7 @@ public class GetFromID extends Command {
 			}
 		}
 		else if (args[0].equalsIgnoreCase("user")) {
-			User user = ErasmusMain.jda.getUserById(args[1]);
+			User user = jda.getUserById(args[1]);
 			if (user == null) MessageOutput.normal("No user found with id **%s**", textChannel, args[1]);
 			else {
 				details.add("**User ID**: `" + args[1] + "`\n----------");

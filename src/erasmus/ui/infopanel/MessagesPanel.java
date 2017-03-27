@@ -19,11 +19,14 @@ public class MessagesPanel extends JPanel {
 	
 	private List<JLabel> messageLabels = new ArrayList<JLabel>();
 	
-	Dimension size = new Dimension(400, 380);
+	private Dimension size;
+	private Dimension labelSize = new Dimension(600, 30);
 	
-	public MessagesPanel() {
-		super();		
+	public MessagesPanel(TextChannelPanel container) {
+		super();
+		size = new Dimension(container.size.width, container.size.height - container.buttonSize.height);
 		setMinimumSize(size);
+		setPreferredSize(size);
 		setSize(size);
 		setMaximumSize(size);
 		
@@ -31,25 +34,20 @@ public class MessagesPanel extends JPanel {
 	}
 	
 	public void display(TextChannel channel) {
+		removeAll();
 		try {
 			int placing = 1;
 		
-			for (Message message: channel.getHistory().retrievePast(18).block()) {
+			for (Message message: channel.getHistory().retrievePast(18).complete()) {
 				JLabel label = new JLabel();
-				label.setText(message.getAuthor().getName() + ": " + message.getContent());
-				Dimension labelSize = new Dimension(400, 16);
-				label.setMinimumSize(labelSize);
+				label.setText("<html>" + message.getAuthor().getName() + ": " + message.getContent() + "</html>");
 				label.setSize(labelSize);
-				label.setPreferredSize(labelSize);
-				label.setMaximumSize(labelSize);
-				
 				messageLabels.add(label);
 				label.setLocation(0, (int)size.getHeight() - (int)labelSize.getHeight() * placing);
 				add(label);
 				placing++;
 				label.setHorizontalAlignment(SwingConstants.LEFT);
 			}
-			
 		}
 		catch (RateLimitedException e) {
 			e.printStackTrace();
