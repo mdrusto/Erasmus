@@ -8,7 +8,7 @@ import javax.swing.*;
 import erasmus.Erasmus;
 import erasmus.ui.infopanel.InfoPanel;
 
-public class ErasmusWindow extends JFrame {
+public class ErasmusUI extends JFrame {
 
 	private static final long serialVersionUID = 2334807590779291894L;
 		
@@ -28,7 +28,7 @@ public class ErasmusWindow extends JFrame {
 	//MARK JLabels
 	private Icon icon = new Icon();
 	
-	public ErasmusWindow() {
+	public ErasmusUI() {
 		GroupLayout layout = new GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
 		

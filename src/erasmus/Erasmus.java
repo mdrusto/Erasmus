@@ -6,7 +6,7 @@ import javax.security.auth.login.LoginException;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
-import erasmus.ui.ErasmusWindow;
+import erasmus.ui.ErasmusUI;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
@@ -17,7 +17,7 @@ public class Erasmus {
 	private static Status status;
 	
 	public static ErasmusListener listener;
-	private static ErasmusWindow gui;
+	private static ErasmusUI gui;
 	private static JDA jda;
 	
 	public static void main(String[] args) {
@@ -25,7 +25,7 @@ public class Erasmus {
 			SwingUtilities.invokeAndWait(new Runnable() {
 				@Override
 				public void run() {
-					gui = new ErasmusWindow();
+					gui = new ErasmusUI();
 				}
 			});
 		}

@@ -9,7 +9,7 @@ import org.reflections.Reflections;
 import erasmus.commands.*;
 import erasmus.properties.ConfigLoader;
 import erasmus.properties.Values;
-import erasmus.ui.ErasmusWindow;
+import erasmus.ui.ErasmusUI;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.entities.Game;
@@ -32,7 +32,7 @@ public class ErasmusListener extends ListenerAdapter {
 	
 	public static String choice;
 	
-	private ErasmusWindow gui;
+	private ErasmusUI gui;
 	
 	public static Command currentCommand;
 	public static String[] currentArgs;
@@ -43,7 +43,7 @@ public class ErasmusListener extends ListenerAdapter {
 	private Guild guild;
 	private MessageChannel infoChannel;
 	
-	public ErasmusListener(ErasmusWindow gui) {
+	public ErasmusListener(ErasmusUI gui) {
 		this.gui = gui;
 	}
 	
