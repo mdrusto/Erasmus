@@ -8,6 +8,7 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.TextChannel;
 
 public class TextChannelPanel extends JPanel {
@@ -64,39 +65,55 @@ public class TextChannelPanel extends JPanel {
 	}
 	
 	public void display(TextChannel channel) {
-		sendButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				channel.sendMessage(messageField.getText()).queue();
-				messageField.setText("");
-			}
-		});
-		sendButton.setEnabled(false);
-		messageField.getDocument().addDocumentListener(new DocumentListener() {
-			@Override
-			public void changedUpdate(DocumentEvent event) {
-				changed();
-			}
-			
-			@Override
-			public void removeUpdate(DocumentEvent event) {
-				changed();
-			}
-
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				changed();
-			}
-			
-			public void changed() {
-				sendButton.setEnabled(!messageField.getText().equals(""));
-			}
-		});
+		if (!channel.getGuild().getSelfMember().hasPermission(channel, Permission.MESSAGE_WRITE)) {
+			messageField.setEnabled(false);
+			messageField.setText("Erasmus is not able to send messages in this channel");
+			sendButton.setEnabled(false);
+		}
+		else {
+			messageField.setEnabled(true);
+			messageField.setText("");
+			sendButton.setEnabled(true);
+			sendButton.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent event) {
+					channel.sendMessage(messageField.getText()).queue();
+					messageField.setText("");
+				}
+			});
+			sendButton.setEnabled(false);
+			messageField.getDocument().addDocumentListener(new DocumentListener() {
+				@Override
+				public void changedUpdate(DocumentEvent event) {
+					changed();
+				}
+				
+				@Override
+				public void removeUpdate(DocumentEvent event) {
+					changed();
+				}
+				
+				@Override
+				public void insertUpdate(DocumentEvent e) {
+					changed();
+				}
+				
+				public void changed() {
+					sendButton.setEnabled(!messageField.getText().equals(""));
+				}
+			});
+		}
 		
 		messagesPanel.display(channel);
 		
 		setVisible(true);
 		repaint();
+	}
+	
+	public void hideThis() {
+		messagesPanel.removeAll();
+		setVisible(false);
+		messagesPanel.revalidate();
 	}
 	
 }

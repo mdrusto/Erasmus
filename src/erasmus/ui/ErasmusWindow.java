@@ -66,6 +66,6 @@ public class ErasmusWindow extends JFrame {
 	}
 	
 	public void loadGuilds() {
-		infoPanel.guildSelector.display(Erasmus.getJDA().getGuilds());
+		infoPanel.start(Erasmus.getJDA());
 	}
 }

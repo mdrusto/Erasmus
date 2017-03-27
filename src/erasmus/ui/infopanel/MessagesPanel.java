@@ -38,7 +38,7 @@ public class MessagesPanel extends JPanel {
 		try {
 			int placing = 1;
 		
-			for (Message message: channel.getHistory().retrievePast(18).block()) {
+			for (Message message: channel.getHistory().retrievePast(18).complete()) {
 				JLabel label = new JLabel();
 				label.setText("<html>" + message.getAuthor().getName() + ": " + message.getContent() + "</html>");
 				label.setSize(labelSize);

@@ -89,7 +89,7 @@ public class TextChannelSelectorPanel extends JScrollPane {
 			
 			button.setVisible(true);
 		}
-		textChannelPanel.setVisible(true);				
+		textChannelPanel.setVisible(true);
 		
 		setVisible(false);
 		setVisible(true);
@@ -97,7 +97,8 @@ public class TextChannelSelectorPanel extends JScrollPane {
 	}
 	
 	public void hideThis() {
-		removeAll();
+		textChannelPanel.removeAll();
 		setVisible(false);
+		textChannelPanel.revalidate();
 	}
 }

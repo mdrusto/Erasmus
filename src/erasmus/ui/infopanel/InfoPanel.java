@@ -7,6 +7,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import erasmus.Erasmus;
+import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.*;
 
 public class InfoPanel extends JPanel {
@@ -41,6 +42,12 @@ public class InfoPanel extends JPanel {
 		channelPanel.setVisible(false);
 		
 		setVisible(true);
+	}
+	
+	public void start(JDA jda) {
+		textChannelSelector.hideThis();
+		channelPanel.hideThis();
+		guildSelector.display(jda.getGuilds());
 	}
 	
 	public void guildSelected(Guild guild) {

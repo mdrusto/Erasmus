@@ -47,7 +47,6 @@ public class GuildSelectorPanel extends JScrollPane {
 	}
 	
 	public void display(List<Guild> guilds) {
-		int placing = 0;
 		for (Guild guild: guilds) {
 			JButton button = new JButton();
 			this.guilds.put(button, guild);
@@ -70,7 +69,6 @@ public class GuildSelectorPanel extends JScrollPane {
 			guildsPanel.add(button);
 			
 			button.setVisible(true);
-			placing++;
 		}
 		
 		guildsPanel.setVisible(true);
@@ -79,7 +77,8 @@ public class GuildSelectorPanel extends JScrollPane {
 		
 	}
 	public void hideThis() {
-		removeAll();
+		guildsPanel.removeAll();
 		setVisible(false);
+		guildsPanel.revalidate();
 	}
 }
