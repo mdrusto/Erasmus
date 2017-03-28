@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.entities.MessageEmbed.ImageInfo;
 import net.dv8tion.jda.core.entities.TextChannel;
+import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.entities.impl.MessageEmbedImpl;
 
 public class Embed extends Command {
@@ -17,7 +18,7 @@ public class Embed extends Command {
 	}
 	
 	@Override
-	public void called(String[] args, TextChannel textChannel) {
+	public void called(String[] args, TextChannel textChannel, User author) {
 		if (!checkArgs(args, textChannel)) return;
 		MessageEmbedImpl embed = new MessageEmbedImpl();
 		if (args[0].equals("red")) embed.setColor(new Color(255, 0, 0));

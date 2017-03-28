@@ -18,8 +18,8 @@ public class Erasmus {
 		
 	public static ErasmusListener listener;
 	private static ErasmusUI gui;
-	private static JDA jda;
-	private static ErasmusBot bot = new ErasmusBot();
+	//private static JDA jda;
+	public static ErasmusBot bot = new ErasmusBot();
 	
 	public static void main(String[] args) {
 		try {
@@ -57,8 +57,8 @@ public class Erasmus {
 			
 			@Override
 			public void done() {
-				gui.statusPanel.setStatus(Status.ONLINE, true);
 				gui.loadGuilds();
+				gui.statusPanel.setStatus(Status.ONLINE, true);
 			}
 		}.execute();
 		
@@ -80,7 +80,7 @@ public class Erasmus {
 	}
 	
 	public static JDA getJDA() {
-		return jda;
+		return bot.getJDA();
 	}
 
 

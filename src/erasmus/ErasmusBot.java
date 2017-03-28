@@ -12,7 +12,7 @@ import net.dv8tion.jda.core.exceptions.RateLimitedException;
 public class ErasmusBot {
 	
 	private JDA jda;
-	private ErasmusListener listener;
+	private ErasmusListener listener = new ErasmusListener();
 	
 	private Status status = Status.OFFLINE;
 	
@@ -22,6 +22,7 @@ public class ErasmusBot {
 				.addListener(listener)
 				.setEventManager(new ErasmusEventManager())
 				.buildBlocking();
+		
 		status = Status.ONLINE;
 	}
 	

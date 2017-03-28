@@ -9,6 +9,7 @@ import erasmus.properties.ConfigLoader;
 import erasmus.properties.ParseException;
 import erasmus.properties.Values;
 import net.dv8tion.jda.core.entities.TextChannel;
+import net.dv8tion.jda.core.entities.User;
 
 public class Settings extends Command {
 	
@@ -28,7 +29,7 @@ public class Settings extends Command {
 	}
 	
 	@Override
-	public void called(String[] args, TextChannel textChannel) {
+	public void called(String[] args, TextChannel textChannel, User author) {
 		if (!checkArgs(args, textChannel)) return;
 		
 	}
@@ -43,7 +44,7 @@ public class Settings extends Command {
 		}
 
 		@Override
-		public void called(String[] args, TextChannel textChannel) {
+		public void called(String[] args, TextChannel textChannel, User author) {
 			if (!checkArgs(args, textChannel)) return;
 			if (!ErasmusListener.isResponse) {
 				ErasmusListener.addResponse();
@@ -71,7 +72,7 @@ public class Settings extends Command {
 		}
 
 		@Override
-		public void called(String[] args, TextChannel textChannel) {
+		public void called(String[] args, TextChannel textChannel, User author) {
 			if (!checkArgs(args, textChannel)) return;
 			try {
 				ConfigLoader.setProperty(args[0], args[1], textChannel);
@@ -100,7 +101,7 @@ public class Settings extends Command {
 		
 		@Override
 		@SuppressWarnings("rawtypes")
-		public void called(String[] args, TextChannel textChannel) {
+		public void called(String[] args, TextChannel textChannel, User author) {
 			if (!checkArgs(args, textChannel)) return;
 			
 			Properties props = ConfigLoader.getProperties();
@@ -130,7 +131,7 @@ public class Settings extends Command {
 		}
 		
 		@Override
-		public void called(String[] args, TextChannel textChannel) {
+		public void called(String[] args, TextChannel textChannel, User author) {
 			if (!checkArgs(args, textChannel)) return;
 			ConfigLoader.saveProperties();
 			MessageOutput.normal("Erasmus' settings have been saved.", textChannel);

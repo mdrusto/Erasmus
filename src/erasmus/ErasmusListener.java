@@ -14,6 +14,7 @@ import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.TextChannel;
@@ -37,6 +38,7 @@ public class ErasmusListener extends ListenerAdapter {
 	public static Command currentCommand;
 	public static String[] currentArgs;
 	public static TextChannel currentTextChannel;
+	public static User currentAuthor;
 		
 	public JDA jda;
 	public User user;
@@ -47,6 +49,7 @@ public class ErasmusListener extends ListenerAdapter {
 		this.gui = gui;
 	}
 	
+	public ErasmusListener() {} 
 	public void setJDA(JDA jda) {
 		this.jda = jda;
 	}
@@ -177,9 +180,10 @@ public class ErasmusListener extends ListenerAdapter {
 				currentCommand = finalCommand;
 				currentArgs = newArgs;
 				currentTextChannel = textChannel;
+				currentAuthor = author;
 				choice = "";
 			}
-			finalCommand.called(newArgs, textChannel);
+			finalCommand.called(newArgs, textChannel, author);
 		}
 	}
 

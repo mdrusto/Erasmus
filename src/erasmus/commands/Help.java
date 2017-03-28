@@ -6,6 +6,7 @@ import erasmus.ErasmusListener;
 import erasmus.MessageOutput;
 import erasmus.properties.Values;
 import net.dv8tion.jda.core.entities.TextChannel;
+import net.dv8tion.jda.core.entities.User;
 
 public class Help extends Command {
 	
@@ -18,7 +19,7 @@ public class Help extends Command {
 	}
 	
 	@Override
-	public void called(String[] args, TextChannel textChannel) {
+	public void called(String[] args, TextChannel textChannel, User author) {
 		if (!checkArgs(args, textChannel)) return;
 
 		String output = "";

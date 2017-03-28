@@ -66,6 +66,6 @@ public class ErasmusUI extends JFrame {
 	}
 	
 	public void loadGuilds() {
-		infoPanel.start(Erasmus.getJDA());
+		infoPanel.start(Erasmus.bot.getJDA());
 	}
 }

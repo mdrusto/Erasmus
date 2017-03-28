@@ -17,7 +17,7 @@ public class GetFromID extends Command {
 	}
 
 	@Override
-	public void called(String[] args, TextChannel textChannel) {
+	public void called(String[] args, TextChannel textChannel, User author) {
 		if (!checkArgs(args, textChannel)) return;
 		
 		JDA jda = textChannel.getJDA();

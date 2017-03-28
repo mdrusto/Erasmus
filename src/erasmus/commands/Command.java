@@ -6,6 +6,7 @@ import java.util.List;
 import erasmus.MessageOutput;
 import erasmus.properties.Values;
 import net.dv8tion.jda.core.entities.TextChannel;
+import net.dv8tion.jda.core.entities.User;
 
 public abstract class Command {
 	public boolean ignoreCase = true;
@@ -60,7 +61,7 @@ public abstract class Command {
 		}
 		return true;
 	}
-	public abstract void called(String[] args, TextChannel textChannel);
+	public abstract void called(String[] args, TextChannel textChannel, User author);
 	public void addAlias(String alias) {
 		aliases.add(alias);
 		}
