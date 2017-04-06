@@ -1,10 +1,10 @@
-package erasmus.commands;
+package erasmus.bot.commands;
 
 import java.util.List;
 
-import erasmus.ErasmusListener;
-import erasmus.MessageOutput;
-import erasmus.properties.Values;
+import erasmus.bot.ErasmusListener;
+import erasmus.bot.MessageOutput;
+import erasmus.bot.properties.Values;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.entities.User;
 

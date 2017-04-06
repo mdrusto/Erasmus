@@ -1,4 +1,4 @@
-package erasmus.properties;
+package erasmus.bot.properties;
 
 public class ParseException extends Exception {
 

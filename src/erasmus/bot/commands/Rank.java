@@ -1,4 +1,4 @@
-package erasmus.commands;
+package erasmus.bot.commands;
 
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.entities.User;

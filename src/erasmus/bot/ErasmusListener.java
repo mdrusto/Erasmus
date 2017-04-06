@@ -1,4 +1,4 @@
-package erasmus;
+package erasmus.bot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,10 +6,10 @@ import java.util.Set;
 
 import org.reflections.Reflections;
 
-import erasmus.commands.*;
-import erasmus.properties.ConfigLoader;
-import erasmus.properties.Values;
-import erasmus.ui.ErasmusUI;
+import erasmus.bot.commands.*;
+import erasmus.bot.properties.ConfigLoader;
+import erasmus.bot.properties.Values;
+import erasmus.ui.ErasmusWindow;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.entities.Game;
@@ -17,6 +17,7 @@ import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
+import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.ReadyEvent;
@@ -32,9 +33,7 @@ public class ErasmusListener extends ListenerAdapter {
 	public static boolean isResponse = false;
 	
 	public static String choice;
-	
-	private ErasmusUI gui;
-	
+		
 	public static Command currentCommand;
 	public static String[] currentArgs;
 	public static TextChannel currentTextChannel;
@@ -45,11 +44,7 @@ public class ErasmusListener extends ListenerAdapter {
 	private Guild guild;
 	private MessageChannel infoChannel;
 	
-	public ErasmusListener(ErasmusUI gui) {
-		this.gui = gui;
-	}
-	
-	public ErasmusListener() {} 
+	public ErasmusListener() {}
 	public void setJDA(JDA jda) {
 		this.jda = jda;
 	}
@@ -210,7 +205,7 @@ public class ErasmusListener extends ListenerAdapter {
 	}
 	
 	public void onGuildMemberJoin(GuildMemberJoinEvent event) {
-		event.getGuild().getTextChannelById("281492686844854272").sendMessage("```Welcome " + event.getMember().getAsMention() + " to the server!```").queue();
+		event.getGuild().getTextChannelById("281492686844854272").sendMessage("Welcome " + event.getMember().getAsMention() + " to the server!").queue();
 	}
 	
 	public void onGuildMessageUpdate(GuildMessageUpdateEvent event) {
@@ -219,7 +214,6 @@ public class ErasmusListener extends ListenerAdapter {
 	}
 
 	public void shutdown() {
-		//MessageOutput.info("Shutting down");
 		ConfigLoader.saveProperties();
 		jda.getPresence().setStatus(OnlineStatus.OFFLINE);
 		jda.shutdown(false);

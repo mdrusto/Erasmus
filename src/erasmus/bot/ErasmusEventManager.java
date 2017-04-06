@@ -1,4 +1,4 @@
-package erasmus;
+package erasmus.bot;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -38,12 +38,7 @@ public class ErasmusEventManager implements IEventManager {
     @Override
     public void handle(Event event) {
         for (EventListener listener : listeners) {
-            try {
-                listener.onEvent(event);
-            }
-            catch (Throwable throwable) {
-                throwable.printStackTrace();
-            }
+        	listener.onEvent(event);
         }
     }
 }

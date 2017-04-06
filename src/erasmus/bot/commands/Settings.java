@@ -1,13 +1,13 @@
-package erasmus.commands;
+package erasmus.bot.commands;
 
 import java.util.Enumeration;
 import java.util.Properties;
 
-import erasmus.ErasmusListener;
-import erasmus.MessageOutput;
-import erasmus.properties.ConfigLoader;
-import erasmus.properties.ParseException;
-import erasmus.properties.Values;
+import erasmus.bot.ErasmusListener;
+import erasmus.bot.MessageOutput;
+import erasmus.bot.properties.ConfigLoader;
+import erasmus.bot.properties.ParseException;
+import erasmus.bot.properties.Values;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.entities.User;
 
@@ -75,7 +75,7 @@ public class Settings extends Command {
 		public void called(String[] args, TextChannel textChannel, User author) {
 			if (!checkArgs(args, textChannel)) return;
 			try {
-				ConfigLoader.setProperty(args[0], args[1], textChannel);
+				ConfigLoader.setProperty(args[0], args[1]);
 				MessageOutput.normal("The key **%s** has been set to **%s**.", textChannel, args[0], args[1]);
 			}
 			catch (NoSuchFieldException e) {

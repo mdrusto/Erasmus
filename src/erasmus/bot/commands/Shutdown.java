@@ -1,6 +1,6 @@
-package erasmus.commands;
+package erasmus.bot.commands;
 
-import erasmus.Erasmus;
+import erasmus.bot.Erasmus;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.entities.User;
 
@@ -16,6 +16,6 @@ public class Shutdown extends Command {
 	@Override
 	public void called(String[] args, TextChannel textChannel, User author) {
 		if (!checkArgs(args, textChannel)) return;
-		Erasmus.listener.shutdown();
+		Erasmus.getBot().stop();
 	}
 }

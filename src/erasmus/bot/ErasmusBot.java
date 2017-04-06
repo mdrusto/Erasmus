@@ -1,8 +1,8 @@
-package erasmus;
+package erasmus.bot;
 
 import javax.security.auth.login.LoginException;
 
-import erasmus.properties.ConfigLoader;
+import erasmus.bot.properties.ConfigLoader;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
@@ -16,7 +16,7 @@ public class ErasmusBot {
 	
 	private Status status = Status.OFFLINE;
 	
-	public void start() throws RateLimitedException, InterruptedException, LoginException {
+	public synchronized void start() throws RateLimitedException, InterruptedException, LoginException {
 		jda = new JDABuilder(AccountType.BOT)
 				.setToken("MjgxNTQ3Njk3MjcyNTIwNzA0.C4d2mQ.LFQCDLsBGGloN4nWdkLbtc8jDUI")
 				.addListener(listener)
@@ -26,7 +26,8 @@ public class ErasmusBot {
 		status = Status.ONLINE;
 	}
 	
-	public void stop() {
+	public synchronized void stop() {
+		if (jda == null) return;
 		ConfigLoader.saveProperties();
 		jda.getPresence().setStatus(OnlineStatus.OFFLINE);
 		jda.shutdown(false);
@@ -36,12 +37,8 @@ public class ErasmusBot {
 	
 	public static enum Status {
 		OFFLINE,
-		ERROR,
+		LOADING,
 		ONLINE;
-	}
-	
-	public void error() {
-		status = Status.ERROR;
 	}
 	
 	public Status getStatus() {
@@ -52,4 +49,7 @@ public class ErasmusBot {
 		return jda;
 	}
 	
+	public ErasmusListener getListener() {
+		return listener;
+	}
 }

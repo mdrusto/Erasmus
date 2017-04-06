@@ -3,6 +3,8 @@ package erasmus.ui.infopanel;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -18,8 +20,9 @@ public class TextChannelPanel extends JPanel {
 	JTextField messageField = new JTextField();
 	JButton sendButton = new JButton();
 	MessagesPanel messagesPanel;
+	JScrollPane channelScroll = new JScrollPane();
 	
-	public Dimension size = new Dimension(600, 800);
+	public Dimension size = new Dimension(700, 800);
 	
 	public Dimension buttonSize = new Dimension(80, 40);
 	
@@ -27,6 +30,22 @@ public class TextChannelPanel extends JPanel {
 		super();
 		
 		messagesPanel = new MessagesPanel(this);
+		channelScroll.setViewportView(messagesPanel);
+		channelScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		channelScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		channelScroll.setOpaque(false);
+		channelScroll.getViewport().setOpaque(false);
+		channelScroll.getVerticalScrollBar().setUnitIncrement(10);
+		channelScroll.getVerticalScrollBar().addAdjustmentListener(new AdjustmentListener() {
+			@Override
+			public void adjustmentValueChanged(AdjustmentEvent event) {
+				int oldValue = channelScroll.getVerticalScrollBar().getMinimum();
+				if (event.getValue() == oldValue && messagesPanel.channel != null) {
+					channelScroll.getVerticalScrollBar().setValue(oldValue + 100);
+					messagesPanel.addMessages(10);
+				}
+			}
+		});
 		
 		sendButton.setText("Send");
 		
@@ -48,13 +67,13 @@ public class TextChannelPanel extends JPanel {
 		GroupLayout layout = new GroupLayout(this);
 		setLayout(layout);
 		layout.setHorizontalGroup(layout.createParallelGroup()
-				.addComponent(messagesPanel)
+				.addComponent(channelScroll)
 				.addGroup(layout.createSequentialGroup()
 						.addComponent(messageField)
 						.addComponent(sendButton)));
 		
 		layout.setVerticalGroup(layout.createSequentialGroup()
-				.addComponent(messagesPanel)
+				.addComponent(channelScroll)
 				.addGroup(layout.createParallelGroup()
 						.addComponent(messageField)
 						.addComponent(sendButton)));
@@ -62,6 +81,9 @@ public class TextChannelPanel extends JPanel {
 		setSize(size);
 		setPreferredSize(size);
 		setMaximumSize(size);
+		
+		setOpaque(false);
+
 	}
 	
 	public void display(TextChannel channel) {

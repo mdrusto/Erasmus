@@ -1,12 +1,14 @@
 package erasmus.ui;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
-import erasmus.Erasmus;
+import erasmus.bot.Erasmus;
+import erasmus.bot.ErasmusBot;
 
 public class RunPanel extends JPanel {
 	
@@ -16,11 +18,11 @@ public class RunPanel extends JPanel {
 	private JButton stopButton = new JButton();
 	private JButton restartButton = new JButton();
 	
-	private Dimension startButtonSize = new Dimension(100, 40);
-	private Dimension stopButtonSize = new Dimension(100, 40);
-	private Dimension restartButtonSize = new Dimension(100, 40);
+	private Dimension startButtonSize = new Dimension(80, 50);
+	private Dimension stopButtonSize = new Dimension(80, 50);
+	private Dimension restartButtonSize = new Dimension(80, 50);
 	
-	private Dimension size = new Dimension(300, 60);
+	private Dimension size = new Dimension(300, 100);
 	
 	public RunPanel() {
 		super();
@@ -28,17 +30,22 @@ public class RunPanel extends JPanel {
 		setLayout(layout);
 		
 		layout.setHorizontalGroup(layout.createParallelGroup()
-				.addGap(20)
+				.addGap(25)
 				.addGroup(layout.createSequentialGroup()
-				.addComponent(startButton)
-				.addComponent(stopButton)
-				.addComponent(restartButton)));
+						.addGap(30)
+						.addComponent(startButton)
+						.addComponent(stopButton)
+						.addComponent(restartButton)
+						.addGap(30))
+				.addGap(25));
 		layout.setVerticalGroup(layout.createSequentialGroup()
-				.addGap(20)
+				.addGap(25)
 				.addGroup(layout.createParallelGroup()
-				.addComponent(startButton)
-				.addComponent(stopButton)
-				.addComponent(restartButton)));
+						.addComponent(startButton)
+						.addComponent(stopButton)
+						.addComponent(restartButton)
+						.addGap(20))
+				.addGap(25));
 		
 		startButton.setMinimumSize(startButtonSize);
 		startButton.setSize(startButtonSize);
@@ -66,43 +73,51 @@ public class RunPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				Erasmus.start();
-				switchStates(true);
+				setOn();
 			}
 		});
 		stopButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				Erasmus.stop();
-				switchStates(false);
+				setOff();
 			}
 		});
 		restartButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				Erasmus.stop();
-				switchStates(false);
-				
+				setLoading();
 				Erasmus.start();
-				switchStates(true);
+				setOn();
 			}
 		});
+		
+		this.setBackground(new Color(40, 40, 40));
 	}
-	
-	public JButton getStartButton() {
-		return startButton;
-	}
-	
-	public JButton getStopButton() {
-		return stopButton;
-	}
-	
-	public JButton getRestartButton() {
-		return restartButton;
-	}
+
 	
 	public void switchStates(boolean on) {
 		startButton.setEnabled(!on);
 		stopButton.setEnabled(on);
 		restartButton.setEnabled(on);
+	}
+	
+	public void setOn() {
+		startButton.setEnabled(false);
+		stopButton.setEnabled(true);
+		restartButton.setEnabled(true);
+	}
+	
+	public void setOff() {
+		startButton.setEnabled(true);
+		stopButton.setEnabled(false);
+		restartButton.setEnabled(false);
+	}
+	
+	public void setLoading() {
+		startButton.setEnabled(false);
+		stopButton.setEnabled(false);
+		restartButton.setEnabled(false);
 	}
 }

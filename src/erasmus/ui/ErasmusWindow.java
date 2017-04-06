@@ -5,52 +5,29 @@ import java.awt.Dimension;
 
 import javax.swing.*;
 
-import erasmus.Erasmus;
+import erasmus.bot.Erasmus;
 import erasmus.ui.infopanel.InfoPanel;
+import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
-public class ErasmusUI extends JFrame {
+public class ErasmusWindow extends JFrame {
 
 	private static final long serialVersionUID = 2334807590779291894L;
 		
-	//MARK JPanels
 	private InfoPanel infoPanel = new InfoPanel();
-	public StatusPanel statusPanel = new StatusPanel();
-	private RunPanel runPanel = new RunPanel();
+	public RightSidePanel rightSidePanel = new RightSidePanel();
 	
-	
-	//MARK JButtons
-	
-	
-	
-	//MARK JTextFields
-	
-	
-	//MARK JLabels
-	private Icon icon = new Icon();
-	
-	public ErasmusUI() {
+	public ErasmusWindow() {
 		GroupLayout layout = new GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
 		
-		layout.setAutoCreateContainerGaps(false);
-		layout.setAutoCreateGaps(false);
-		
 		layout.setHorizontalGroup(layout.createSequentialGroup()
 				.addComponent(infoPanel)
-				.addGap(100)
-				.addGroup(layout.createParallelGroup()
-						.addComponent(statusPanel)
-						.addComponent(icon)
-						.addComponent(runPanel)));
+				.addComponent(rightSidePanel));
 		
 		layout.setVerticalGroup(layout.createParallelGroup()
 				.addComponent(infoPanel)
-				.addGap(100)
-				.addGroup(layout.createSequentialGroup()
-						.addComponent(statusPanel)
-						.addGap(360)
-						.addComponent(icon)
-						.addComponent(runPanel)));
+				.addComponent(rightSidePanel));
 		pack();
 		getContentPane().setBackground(new Color(40, 40, 40));
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -63,9 +40,18 @@ public class ErasmusUI extends JFrame {
 		setVisible(true);
 		setIconImage(new ImageIcon("resources/img/erasmus_icon.png").getImage());
 		setTitle("Erasmus v0.0.1");
+		
+		
 	}
 	
 	public void loadGuilds() {
 		infoPanel.start(Erasmus.bot.getJDA());
+	}
+	
+	public static class UIEventListener extends ListenerAdapter {
+		@Override
+		public void onMessageReceived(MessageReceivedEvent event) {
+			
+		}
 	}
 }

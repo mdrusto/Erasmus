@@ -1,4 +1,4 @@
-package erasmus.commands;
+package erasmus.bot.commands;
 
 import java.awt.Color;
 import java.lang.reflect.Field;

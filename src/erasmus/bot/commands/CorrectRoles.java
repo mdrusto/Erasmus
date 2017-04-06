@@ -1,9 +1,9 @@
-package erasmus.commands;
+package erasmus.bot.commands;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import erasmus.MessageOutput;
+import erasmus.bot.MessageOutput;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Role;

@@ -1,4 +1,4 @@
-package erasmus.properties;
+package erasmus.bot.properties;
 
 public class Values {
 	public static boolean readEdits;

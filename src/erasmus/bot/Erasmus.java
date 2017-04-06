@@ -1,4 +1,4 @@
-package erasmus;
+package erasmus.bot;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -6,27 +6,34 @@ import javax.security.auth.login.LoginException;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
-import erasmus.ui.ErasmusUI;
-import net.dv8tion.jda.core.AccountType;
-import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.JDABuilder;
+import erasmus.bot.ErasmusBot.Status;
+import erasmus.ui.ErasmusWindow;
+import erasmus.ui.UIUncaughtExceptionHandler;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
-
-import erasmus.ErasmusBot.Status;
 
 public class Erasmus {
 		
-	public static ErasmusListener listener;
-	private static ErasmusUI gui;
-	//private static JDA jda;
+	public static ErasmusWindow gui;
 	public static ErasmusBot bot = new ErasmusBot();
+	private static ErasmusWindow.UIEventListener uiEventListener = new ErasmusWindow.UIEventListener();
 	
 	public static void main(String[] args) {
+		Thread.setDefaultUncaughtExceptionHandler(new UIUncaughtExceptionHandler());
+		Thread.setDefaultUncaughtExceptionHandler(new BotExceptionHandler());
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			@Override
+			public void run() {
+				if (bot.getStatus() == Status.ONLINE) {
+					bot.getJDA().removeEventListener(uiEventListener);
+					
+				}
+			}
+		});
 		try {
 			SwingUtilities.invokeAndWait(new Runnable() {
 				@Override
 				public void run() {
-					gui = new ErasmusUI();
+					gui = new ErasmusWindow();
 				}
 			});
 		}
@@ -36,13 +43,12 @@ public class Erasmus {
 		catch(InvocationTargetException e) {
 			e.getTargetException().printStackTrace();
 		}
-		listener = new ErasmusListener(gui);
 		
 		start();
 	}
 	
 	public static void start() {
-		gui.statusPanel.setStatus(Status.ONLINE, false);
+		gui.rightSidePanel.statusPanel.setStatus(Status.LOADING);
 		new SwingWorker<Void, Void>() {
 			@Override
 			public Void doInBackground() {
@@ -58,14 +64,13 @@ public class Erasmus {
 			@Override
 			public void done() {
 				gui.loadGuilds();
-				gui.statusPanel.setStatus(Status.ONLINE, true);
+				gui.rightSidePanel.statusPanel.setStatus(Status.ONLINE);
 			}
 		}.execute();
 		
 	}
 	
 	public static void stop() {
-		gui.statusPanel.setStatus(Status.OFFLINE, false);
 		new SwingWorker<Void, Void>() {
 			@Override
 			public Void doInBackground() {
@@ -74,14 +79,12 @@ public class Erasmus {
 			}
 			@Override
 			public void done() {
-				gui.statusPanel.setStatus(Status.OFFLINE, true);
+				gui.rightSidePanel.statusPanel.setStatus(Status.OFFLINE);
 			}
 		}.execute();
 	}
 	
-	public static JDA getJDA() {
-		return bot.getJDA();
+	public static ErasmusBot getBot() {
+		return bot;
 	}
-
-
 }

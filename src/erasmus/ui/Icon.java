@@ -18,6 +18,7 @@ public class Icon extends JLabel {
 		setSize(size);
 		setPreferredSize(size);
 		setMaximumSize(size);
-		setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		setBackground(new Color(40, 40, 40));
+		setOpaque(false);
 	}
 }

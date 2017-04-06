@@ -13,8 +13,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import erasmus.Erasmus;
-import erasmus.ErasmusBot;
+import erasmus.bot.Erasmus;
+import erasmus.bot.ErasmusBot;
 
 public class StatusPanel extends JPanel {
 	
@@ -40,13 +40,27 @@ public class StatusPanel extends JPanel {
 		setPreferredSize(size);
 		setMaximumSize(size);
 		
-		setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		setBackground(new Color(40, 40, 40));
+		
 	}
-	public void setStatus(ErasmusBot.Status status, boolean done) {
+	public void setStatus(ErasmusBot.Status status) {
 		switch(status) {
-			case ONLINE:
-			if (!done) label.setIcon(loadingIcon);
-			else label.setIcon(onlineIcon);
+			case ONLINE: label.setIcon(onlineIcon);
+			break;
+			case LOADING: label.setIcon(loadingIcon);
+			break;
 		}
+	}
+	
+	public void setOnline() {
+		
+	}
+	
+	public void setOffline() {
+		
+	}
+	
+	public void setError(Throwable e) {
+		
 	}
 }

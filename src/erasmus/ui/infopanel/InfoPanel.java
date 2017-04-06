@@ -5,8 +5,10 @@ import java.awt.Dimension;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+import javax.swing.SwingUtilities;
 
-import erasmus.Erasmus;
+import erasmus.bot.Erasmus;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.*;
 
@@ -18,7 +20,7 @@ public class InfoPanel extends JPanel {
 	TextChannelSelectorPanel textChannelSelector;
 	TextChannelPanel channelPanel;
 	
-	private Dimension size = new Dimension(800, 800);
+	private Dimension size = new Dimension(1000, 800);
 	
 	public InfoPanel() {
 		setMinimumSize(size);
@@ -41,7 +43,8 @@ public class InfoPanel extends JPanel {
 		
 		channelPanel.setVisible(false);
 		
-		setVisible(true);
+		setOpaque(false);
+		textChannelSelector.setVisible(false);
 	}
 	
 	public void start(JDA jda) {
@@ -51,15 +54,29 @@ public class InfoPanel extends JPanel {
 	}
 	
 	public void guildSelected(Guild guild) {
-		textChannelSelector.setLocation(200, 0);
+		textChannelSelector.setLocation(100, 0);
 		textChannelSelector.display(guild);
+		channelPanel.setLocation(300, 0);
+		channelPanel.display(guild.getPublicChannel());
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				channelPanel.channelScroll.getVerticalScrollBar().setValue(channelPanel.channelScroll.getVerticalScrollBar().getMaximum());
+			}
+		});
 	}
 	
 	public void textChannelSelected(TextChannel channel) {
-		guildSelector.hideThis();
-		textChannelSelector.setLocation(0, 0);
-		channelPanel.setLocation(200, 0);
+		textChannelSelector.setLocation(100, 0);
+		channelPanel.setLocation(300, 0);
 		
 		channelPanel.display(channel);
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				channelPanel.channelScroll.getVerticalScrollBar().setValue(channelPanel.channelScroll.getVerticalScrollBar().getMaximum());
+			}
+		});
+
 	}
 }

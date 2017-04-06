@@ -1,4 +1,4 @@
-package erasmus.properties;
+package erasmus.bot.properties;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -8,7 +8,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Properties;
 
-import erasmus.MessageOutput;
+import erasmus.bot.MessageOutput;
 import net.dv8tion.jda.core.entities.TextChannel;
 
 public class ConfigLoader {
@@ -116,7 +116,7 @@ public class ConfigLoader {
 		}
 	}
 	
-	public static void setProperty (String key, String value, TextChannel channel) throws NoSuchFieldException, ParseException, IllegalAccessException {
+	public static void setProperty (String key, String value) throws NoSuchFieldException, ParseException, IllegalAccessException {
 		Field field = Values.class.getField(key);
 		field.set(null, getValue(key, value, field.getType()));
 		props.setProperty(key, value);

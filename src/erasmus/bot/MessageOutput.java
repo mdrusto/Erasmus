@@ -1,8 +1,9 @@
-package erasmus;
+package erasmus.bot;
 
-import erasmus.properties.Values;
+import erasmus.bot.properties.Values;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.TextChannel;
+import net.dv8tion.jda.core.exceptions.PermissionException;
 
 public class MessageOutput {
 	
@@ -17,7 +18,7 @@ public class MessageOutput {
 		MessageOutput.announcementsChannel = announcementsChannel;
 	}
 	
-	public static void normal (String message, TextChannel channel, String... args) {
+	public static void normal (String message, MessageChannel channel, String... args) {
 		channel.sendMessage(String.format(Values.messageFormat, String.format(message, (Object[])args))).queue();
 	}
 	

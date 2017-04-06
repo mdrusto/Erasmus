@@ -30,9 +30,10 @@ public class TextChannelSelectorPanel extends JScrollPane {
 	public TextChannelSelectorPanel(InfoPanel container) {
 		this.container = container;
 		
-		size = new Dimension(container.getSize().width / 4, container.getSize().height);
+		size = new Dimension(200, container.getSize().height);
 		
-		textChannelPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		setBorder(BorderFactory.createMatteBorder(0, 0, 0, 2, Color.BLACK));
+		
 		textChannelPanel.setVisible(true);
 		
 		setMinimumSize(size);
@@ -47,9 +48,14 @@ public class TextChannelSelectorPanel extends JScrollPane {
 		
 		
 		setViewportView(textChannelPanel);
+		
+		textChannelPanel.setBackground(new Color(40, 40, 40));
+
 	}
 	
 	public void display(Guild guild) {
+		textChannelPanel.removeAll();
+		textChannelPanel.revalidate();
 		for (TextChannel channel: guild.getTextChannels()) {
 			JButton button = new JButton();
 			this.channels.put(button, channel);
@@ -86,6 +92,10 @@ public class TextChannelSelectorPanel extends JScrollPane {
 			button.setBackground(Color.GRAY);
 			
 			textChannelPanel.add(button);
+			
+			button.setForeground(Color.WHITE);
+			button.setBorder(BorderFactory.createEmptyBorder());
+			button.setOpaque(false);
 			
 			button.setVisible(true);
 		}
