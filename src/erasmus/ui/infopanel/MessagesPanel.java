@@ -28,6 +28,7 @@ public class MessagesPanel extends JPanel {
 	private List<Message> continuingMessages = new ArrayList<Message>();
 	
 	public TextChannel channel;
+	public MessageHistory history;
 	
 	public int numMessages = 0;
 	
@@ -46,15 +47,13 @@ public class MessagesPanel extends JPanel {
 	}
 	
 	public void display(TextChannel channel) {
-		System.out.println(channel == null);
-
 		removeAll();
 		currentHeight = 0;
 		continuingMessages.clear();
 		lastMessage = null;
 		
 		this.channel = channel;
-		
+		history = channel.getHistory();
 		
 		addMessages(40);
 	}
@@ -65,9 +64,7 @@ public class MessagesPanel extends JPanel {
 		Component[] oldComps = this.getComponents();
 		
 		System.out.println(channel == null);
-		MessageHistory history = channel.getHistory();
-		List<Message> all = history.retrievePast(numMessages).complete();
-		List<Message> pastMessages = all.subList(numMessages - num, all.size() - 1);
+		List<Message> pastMessages = history.retrievePast(num).complete();
 		for (Message message: pastMessages) {
 			if (!(lastMessage != null && message.getCreationTime().plusMinutes(10).compareTo(lastMessage.getCreationTime()) >= 0 && message.getAuthor().getId().equals(lastMessage.getAuthor().getId()))) {
 				if (continuingMessages.size() > 0) {
