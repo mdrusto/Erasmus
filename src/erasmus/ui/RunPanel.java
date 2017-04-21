@@ -1,6 +1,5 @@
 package erasmus.ui;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,7 +7,6 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 
 import erasmus.bot.Erasmus;
-import erasmus.bot.ErasmusBot;
 
 public class RunPanel extends JPanel {
 	
@@ -21,9 +19,7 @@ public class RunPanel extends JPanel {
 	private Dimension startButtonSize = new Dimension(80, 50);
 	private Dimension stopButtonSize = new Dimension(80, 50);
 	private Dimension restartButtonSize = new Dimension(80, 50);
-	
-	private Dimension size = new Dimension(300, 100);
-	
+		
 	public RunPanel() {
 		super();
 		GroupLayout layout = new GroupLayout(this);

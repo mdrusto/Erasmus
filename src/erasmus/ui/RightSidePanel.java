@@ -1,10 +1,8 @@
 package erasmus.ui;
 
 import java.awt.Color;
-import java.awt.Dimension;
 
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.GroupLayout;
 import javax.swing.JPanel;
 
@@ -15,10 +13,7 @@ public class RightSidePanel extends JPanel {
 	public StatusPanel statusPanel = new StatusPanel();
 	private EmptySpace emptySpace = new EmptySpace();
 	private Icon icon = new Icon();
-	private RunPanel runPanel = new RunPanel();
-	
-	private Dimension size = new Dimension(300, 800);
-	
+	private RunPanel runPanel = new RunPanel();	
 	
 	public RightSidePanel() {
 		//BoxLayout layout = new BoxLayout(this, BoxLayout.Y_AXIS);

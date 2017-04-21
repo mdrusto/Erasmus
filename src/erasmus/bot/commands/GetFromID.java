@@ -3,7 +3,6 @@ package erasmus.bot.commands;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-import erasmus.bot.Erasmus;
 import erasmus.bot.MessageOutput;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.*;

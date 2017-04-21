@@ -8,7 +8,6 @@ import javax.swing.SwingWorker;
 
 import erasmus.bot.ErasmusBot.Status;
 import erasmus.ui.ErasmusWindow;
-import erasmus.ui.UIUncaughtExceptionHandler;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
 
 public class Erasmus {

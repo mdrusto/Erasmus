@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JPanel;
+import javax.swing.SwingWorker;
 
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
@@ -56,7 +57,13 @@ public class MessagesPanel extends JPanel {
 		
 		this.channel = channel;
 		history = channel.getHistory();
-		addPastMessages(40);
+		new SwingWorker<Void, Void>() {
+			@Override
+			public Void doInBackground() {
+				addPastMessages(40);
+				return null;
+			}
+		}.execute();
 		((MessageChannelPanel)getParent().getParent().getParent()).started = true;
 	}
 	

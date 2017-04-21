@@ -1,8 +1,6 @@
 package erasmus.ui.infopanel;
 
 import java.awt.Dimension;
-import java.awt.event.AdjustmentEvent;
-import java.awt.event.AdjustmentListener;
 
 import javax.swing.*;
 

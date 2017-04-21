@@ -6,7 +6,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import erasmus.bot.Erasmus;
 import erasmus.bot.ErasmusBot;
 
 public class StatusPanel extends JPanel {
@@ -41,6 +40,10 @@ public class StatusPanel extends JPanel {
 			case ONLINE: label.setIcon(onlineIcon);
 			break;
 			case LOADING: label.setIcon(loadingIcon);
+			break;
+		case OFFLINE:
+			break;
+		default:
 			break;
 		}
 	}

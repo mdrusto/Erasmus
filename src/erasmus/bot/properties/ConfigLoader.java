@@ -9,7 +9,6 @@ import java.lang.reflect.Modifier;
 import java.util.Properties;
 
 import erasmus.bot.MessageOutput;
-import net.dv8tion.jda.core.entities.TextChannel;
 
 public class ConfigLoader {
 	
