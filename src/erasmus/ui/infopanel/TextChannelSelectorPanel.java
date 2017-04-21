@@ -8,30 +8,24 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
+import erasmus.ui.Colours;
 import net.dv8tion.jda.core.entities.*;
 
 public class TextChannelSelectorPanel extends JScrollPane {
 
 	private static final long serialVersionUID = 3461070594233407645L;
 	
-	public HashMap<JButton, TextChannel> channels = new HashMap<JButton, TextChannel>();
+	public HashMap<TextChannel, JButton> channels = new HashMap<TextChannel, JButton>();
 	
-	InfoPanel container;
 	
 	JPanel textChannelPanel = new JPanel();
 	
-	JButton currentButton, lastButton;
+	JButton lastButton;
 	
-	Dimension size;
+	Dimension size = new Dimension(200, 800);
 	
-	public TextChannelSelectorPanel(InfoPanel container) {
-		this.container = container;
-		
-		size = new Dimension(200, container.getSize().height);
-		
+	public TextChannelSelectorPanel() {
 		setBorder(BorderFactory.createMatteBorder(0, 0, 0, 2, Color.BLACK));
 		
 		textChannelPanel.setVisible(true);
@@ -49,66 +43,64 @@ public class TextChannelSelectorPanel extends JScrollPane {
 		
 		setViewportView(textChannelPanel);
 		
-		textChannelPanel.setBackground(new Color(40, 40, 40));
-
+		textChannelPanel.setBackground(Colours.BACKGROUND);
+		
+		
 	}
 	
-	public void display(Guild guild) {
-		textChannelPanel.removeAll();
-		textChannelPanel.revalidate();
-		for (TextChannel channel: guild.getTextChannels()) {
-			JButton button = new JButton();
-			this.channels.put(button, channel);
+	public void init(List<TextChannel> channels) {
+		channels.forEach(this::addChannel);
+	}
+	
+	public void addChannel(TextChannel channel) {
+		TextChannelButton button = new TextChannelButton(channel);
+		textChannelPanel.add(button);
+		channels.put(channel, button);
+		revalidate();
+		repaint();
+	}
+	
+	public void textChannelDeleted(TextChannel channel) {
+		textChannelPanel.remove(channels.get(channel));
+		channels.remove(channel);
+		revalidate();
+		repaint();
+	}
+	
+	public void selectChannel(TextChannel channel) {
+		JButton button = channels.get(channel);
+		button.setEnabled(false);
+		button.setBackground(Color.DARK_GRAY);
+		if (lastButton != null) {
+			lastButton.setEnabled(true);
+			lastButton.setBackground(Color.GRAY);
+		}
+		((GuildViewPanel)getParent()).textChannelSelected(channel);
+		
+		lastButton = button;
+	}
+	
+	private class TextChannelButton extends JButton {
+		
+		
+		private static final long serialVersionUID = 64027815538733805L;
+		
+		private Dimension size = new Dimension(200, 60);
+		
+		private TextChannelButton(TextChannel channel) {
 			
-			button.addActionListener(new ActionListener() {
-				@Override
+			setMinimumSize(size);
+			setSize(size);
+			setPreferredSize(size);
+			setMaximumSize(size);
+			
+			setText(channel.getName());
+			
+			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent event) {
-					container.textChannelSelected(channel);
-					
-					lastButton = currentButton;
-					currentButton = button;
-					if (lastButton != null) {
-						lastButton.setEnabled(true);
-						lastButton.setBackground(Color.GRAY);
-					}
-					button.setBackground(Color.DARK_GRAY);
-					
-					button.setEnabled(false);
+					((GuildViewPanel)TextChannelSelectorPanel.this.getParent()).textChannelSelected(channel);
 				}
 			});
-			
-			Dimension d = new Dimension(200, 30);
-			
-			button.setMinimumSize(d);
-			button.setSize(d);
-			button.setMaximumSize(d);
-			
-			button.setText(channel.getName());
-			
-			button.setFocusable(false);
-			
-			//button.setBorder(BorderFactory.createEmptyBorder());
-			
-			button.setBackground(Color.GRAY);
-			
-			textChannelPanel.add(button);
-			
-			button.setForeground(Color.WHITE);
-			button.setBorder(BorderFactory.createEmptyBorder());
-			button.setOpaque(false);
-			
-			button.setVisible(true);
 		}
-		textChannelPanel.setVisible(true);
-		
-		setVisible(false);
-		setVisible(true);
-		
-	}
-	
-	public void hideThis() {
-		textChannelPanel.removeAll();
-		setVisible(false);
-		textChannelPanel.revalidate();
 	}
 }

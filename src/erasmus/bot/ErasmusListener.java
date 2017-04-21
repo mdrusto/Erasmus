@@ -9,15 +9,12 @@ import org.reflections.Reflections;
 import erasmus.bot.commands.*;
 import erasmus.bot.properties.ConfigLoader;
 import erasmus.bot.properties.Values;
-import erasmus.ui.ErasmusWindow;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
-import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.ReadyEvent;
@@ -73,7 +70,7 @@ public class ErasmusListener extends ListenerAdapter {
 		jda.getPresence().setStatus(OnlineStatus.ONLINE);
 
 		
-		Reflections r = new Reflections("erasmus.commands");
+		Reflections r = new Reflections("erasmus.bot.commands");
 		
 		Set<Class<? extends Command>> classes = r.getSubTypesOf(Command.class);
 				

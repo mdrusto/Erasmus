@@ -15,11 +15,9 @@ public class Erasmus {
 		
 	public static ErasmusWindow gui;
 	public static ErasmusBot bot = new ErasmusBot();
-	private static ErasmusWindow.UIEventListener uiEventListener = new ErasmusWindow.UIEventListener();
+	private static ErasmusWindow.UIEventListener uiEventListener;
 	
 	public static void main(String[] args) {
-		Thread.setDefaultUncaughtExceptionHandler(new UIUncaughtExceptionHandler());
-		Thread.setDefaultUncaughtExceptionHandler(new BotExceptionHandler());
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			@Override
 			public void run() {
@@ -43,6 +41,9 @@ public class Erasmus {
 		catch(InvocationTargetException e) {
 			e.getTargetException().printStackTrace();
 		}
+		Thread.setDefaultUncaughtExceptionHandler(gui.new UIUncaughtExceptionHandler());
+
+		uiEventListener = gui.new UIEventListener();
 		
 		start();
 	}
@@ -53,7 +54,7 @@ public class Erasmus {
 			@Override
 			public Void doInBackground() {
 				try {
-					bot.start();
+					bot.start(gui);
 				}
 				catch (RateLimitedException | LoginException | InterruptedException e) {
 					e.printStackTrace();
@@ -63,7 +64,9 @@ public class Erasmus {
 			
 			@Override
 			public void done() {
-				gui.loadGuilds();
+				bot.getJDA().addEventListener(uiEventListener);
+				gui.init(bot.getJDA());
+				
 				gui.rightSidePanel.statusPanel.setStatus(Status.ONLINE);
 			}
 		}.execute();

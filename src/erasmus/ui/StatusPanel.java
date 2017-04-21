@@ -1,14 +1,7 @@
 package erasmus.ui;
 
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.RenderingHints;
-import java.awt.image.BufferedImage;
 
-import javax.swing.BorderFactory;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -40,7 +33,7 @@ public class StatusPanel extends JPanel {
 		setPreferredSize(size);
 		setMaximumSize(size);
 		
-		setBackground(new Color(40, 40, 40));
+		setBackground(Colours.BACKGROUND);
 		
 	}
 	public void setStatus(ErasmusBot.Status status) {

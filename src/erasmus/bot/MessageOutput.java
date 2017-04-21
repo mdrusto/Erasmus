@@ -3,7 +3,6 @@ package erasmus.bot;
 import erasmus.bot.properties.Values;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.TextChannel;
-import net.dv8tion.jda.core.exceptions.PermissionException;
 
 public class MessageOutput {
 	

@@ -1,20 +1,15 @@
 package erasmus.ui.infopanel;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.SwingConstants;
 
 import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.MessageHistory;
-import net.dv8tion.jda.core.entities.TextChannel;
 
 public class MessagesPanel extends JPanel {
 
@@ -27,13 +22,20 @@ public class MessagesPanel extends JPanel {
 	private Message lastMessage = null;
 	private List<Message> continuingMessages = new ArrayList<Message>();
 	
-	public TextChannel channel;
+	public MessageChannel channel;
 	public MessageHistory history;
+	
+	private MessageGroupPanel last = null;
+	
+	private boolean hasStarted = false;
+	
+	MessageChannelPanel container;
 	
 	public int numMessages = 0;
 	
-	public MessagesPanel(TextChannelPanel container) {
+	public MessagesPanel(MessageChannelPanel container) {
 		super();
+		this.container = container;
 		size = new Dimension(container.size.width, container.size.height - container.buttonSize.height);
 		
 		setMinimumSize(size);
@@ -46,7 +48,7 @@ public class MessagesPanel extends JPanel {
 		setVisible(true);
 	}
 	
-	public void display(TextChannel channel) {
+	public void display(MessageChannel channel) {
 		removeAll();
 		currentHeight = 0;
 		continuingMessages.clear();
@@ -54,23 +56,30 @@ public class MessagesPanel extends JPanel {
 		
 		this.channel = channel;
 		history = channel.getHistory();
-		
-		addMessages(40);
+		addPastMessages(40);
+		((MessageChannelPanel)getParent().getParent().getParent()).started = true;
 	}
 	
-	public void addMessages(int num) {
+	public void addPastMessages(int num) {
 		numMessages += num;
-		List<IndividualMessagePanel> newComps = new ArrayList<IndividualMessagePanel>();
-		Component[] oldComps = this.getComponents();
+		List<MessageGroupPanel> newComps = new ArrayList<MessageGroupPanel>();
+		Component[] oldComps;
+		synchronized(getTreeLock()) {
+			oldComps = this.getComponents();
+		}
 		
-		System.out.println(channel == null);
 		List<Message> pastMessages = history.retrievePast(num).complete();
+		
+		
 		for (Message message: pastMessages) {
-			if (!(lastMessage != null && message.getCreationTime().plusMinutes(10).compareTo(lastMessage.getCreationTime()) >= 0 && message.getAuthor().getId().equals(lastMessage.getAuthor().getId()))) {
+			if (!(lastMessage != null && message.getCreationTime().plusMinutes(10).compareTo(lastMessage.getCreationTime()) >= 0 && message.getAuthor().equals(lastMessage.getAuthor()))) {
 				if (continuingMessages.size() > 0) {
-					IndividualMessagePanel messagePanel1 = new IndividualMessagePanel(continuingMessages);
+					MessageGroupPanel messagePanel1 = new MessageGroupPanel(continuingMessages);
+					if (!hasStarted) {
+						last = messagePanel1;
+						hasStarted = true;
+					}
 					add(messagePanel1);
-					messagePanel1.setSize((int)size.getWidth(), messagePanel1.getHeight());
 					currentHeight += messagePanel1.getHeight();
 					messagePanel1.height = currentHeight;
 					newComps.add(messagePanel1);
@@ -81,7 +90,6 @@ public class MessagesPanel extends JPanel {
 			else continuingMessages.add(0, message);
 			lastMessage = message;			
 		}
-		System.out.println("hi");
 
 		size = new Dimension(this.getWidth(), currentHeight);
 		
@@ -92,12 +100,33 @@ public class MessagesPanel extends JPanel {
 		
 		synchronized(getTreeLock()) {
 			for (Component comp: oldComps) {
-				if (comp instanceof IndividualMessagePanel) comp.setLocation(0, this.getHeight() - ((IndividualMessagePanel)comp).height);
+				if (comp instanceof MessageGroupPanel) comp.setLocation(0, this.getHeight() - ((MessageGroupPanel)comp).height);
 			}
 		}
 		
-		for (IndividualMessagePanel panel: newComps) {
+		for (MessageGroupPanel panel: newComps) {
 			panel.setLocation(0, this.getHeight() - panel.height);
+		}
+	}
+	
+	public void addNewMessage(Message message) {
+		if (last.getAuthor().equals(message.getAuthor()) && message.getCreationTime().plusMinutes(10).compareTo(last.getLastMessage().getCreationTime()) >= 0) last.addMessage(message);
+		else {
+			List<Message> list = new ArrayList<Message>();
+			list.add(message);
+			MessageGroupPanel panel = new MessageGroupPanel(list);
+			add(panel);
+			panel.height = currentHeight;
+			currentHeight += panel.getHeight();
+			
+			size = new Dimension(this.getWidth(), currentHeight);
+			
+			setMinimumSize(size);
+			setPreferredSize(size);
+			setSize(size);
+			setMaximumSize(size);
+			
+			panel.setLocation(0, getHeight() - panel.getHeight());
 		}
 	}
 }

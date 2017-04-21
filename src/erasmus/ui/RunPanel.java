@@ -93,7 +93,7 @@ public class RunPanel extends JPanel {
 			}
 		});
 		
-		this.setBackground(new Color(40, 40, 40));
+		this.setOpaque(false);
 	}
 
 	

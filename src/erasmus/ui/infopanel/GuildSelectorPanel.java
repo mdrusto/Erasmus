@@ -17,72 +17,73 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import erasmus.bot.ErasmusException;
+import erasmus.ui.Loadable;
+import erasmus.ui.tabs.DiscordViewPanel;
 import net.dv8tion.jda.core.entities.*;
 
 public class GuildSelectorPanel extends JScrollPane {
 	
 	private static final long serialVersionUID = -3688678325441465448L;
 	
-	private Map<JButton, Guild> guilds = new HashMap<JButton, Guild>();
+	private Map<Guild, JButton> guilds = new HashMap<Guild, JButton>();
 	
-	private InfoPanel container;
 	
 	private JPanel guildsPanel = new JPanel();
 	
-	private Dimension size;
+	private Dimension size = new Dimension(100, 800);
 	private Dimension buttonSize = new Dimension(80, 80);
 	
 	
-	public GuildSelectorPanel(InfoPanel container) {
-		this.container = container;
-		setBorder(BorderFactory.createEmptyBorder());
-				
-		size = new Dimension(100, container.getSize().height);
-		
+	public GuildSelectorPanel() {
 		setMinimumSize(size);
 		setSize(size);
 		setPreferredSize(size);
 		setMaximumSize(size);
-		
 		guildsPanel.setLayout(new BoxLayout(guildsPanel, BoxLayout.Y_AXIS));
-		
-		
 		setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_NEVER);
 		setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_AS_NEEDED);
-		
 		setViewportView(guildsPanel);
-		
 		setBorder(BorderFactory.createMatteBorder(0, 0, 0, 2, Color.BLACK));
-		
-		//guildsPanel.setOpaque(false);
-		//setOpaque(false);
-		//this.getViewport().setOpaque(false);
-		//this.setBorder(null);
 		guildsPanel.setBackground(new Color(40, 40, 40));
 		
 	}
 	
-	public void display(List<Guild> guilds) {
-		guildsPanel.removeAll();
-		guildsPanel.revalidate();
-		for (Guild guild: guilds) {
-			JButton button = new JButton();
-			this.guilds.put(button, guild);
-			
-			button.addActionListener(new ActionListener() {
+	public void init(List<Guild> guilds) {
+		guilds.forEach(this::addGuild);
+	}
+	
+	public void addGuild(Guild guild) {
+		GuildButton button = new GuildButton(guild);
+		guildsPanel.add(button);
+		guilds.put(guild, button);
+		revalidate();
+		repaint();
+	}
+	
+	public void removeGuild(Guild guild) {
+		guildsPanel.remove(guilds.get(guild));
+		guilds.remove(guild);
+		revalidate();
+		repaint();
+	}
+	
+	private class GuildButton extends JButton implements Loadable {
+		
+		private static final long serialVersionUID = 8931413215011839464L;
+		
+		private GuildButton(Guild guild) {
+			addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent event) {
-					container.guildSelected(guild);
+					((DiscordViewPanel)GuildSelectorPanel.this.getParent()).guildSelected(guild);
 				}
-			});
-						
-			button.setMinimumSize(buttonSize);
-			button.setPreferredSize(buttonSize);
-			button.setSize(buttonSize);
-			button.setMaximumSize(buttonSize);
+			});			
+			setMinimumSize(buttonSize);
+			setPreferredSize(buttonSize);
+			setSize(buttonSize);
+			setMaximumSize(buttonSize);
 			
 			URLConnection conn;
-			
 			try {
 				URL url = new URL(guild.getIconUrl());
 				conn = url.openConnection();
@@ -90,37 +91,34 @@ public class GuildSelectorPanel extends JScrollPane {
 				
 				BufferedImage image = ImageIO.read(conn.getInputStream());
 				
-				button.setIcon(new ImageIcon(image.getScaledInstance(image.getWidth() / 2, image.getHeight() / 2, Image.SCALE_DEFAULT)));
+				setIcon(new ImageIcon(image.getScaledInstance(image.getWidth() / 2, image.getHeight() / 2, Image.SCALE_SMOOTH)));
 			}
 			catch (IOException e) {
 				throw new ErasmusException(e);
 			}
-			
-			button.setFocusable(false);
-			
-			guildsPanel.add(button);
-			
-			button.setAlignmentX(CENTER_ALIGNMENT);
-			
-			button.setToolTipText(guild.getName());
-			
-			
-			button.setVisible(true);
-			
-			button.setOpaque(false);
-			button.setBorder(BorderFactory.createEmptyBorder());
-			button.setBackground(new Color(40, 40, 40));
+			setFocusable(false);
+			setAlignmentX(CENTER_ALIGNMENT);
+			setToolTipText(guild.getName());
+			setVisible(true);
+			setOpaque(false);
+			setBorder(BorderFactory.createEmptyBorder());
+			setBackground(new Color(40, 40, 40));
+			addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent event) {
+					((DiscordViewPanel)GuildSelectorPanel.this.getParent()).guildSelected(guild);
+				}
+			});
 		}
 		
-		//guildsPanel.setOpaque(false);
-		//setOpaque(false);
+		@Override
+		public void startLoading() {
+			
+		}
 		
-		//guildsPanel.setVisible(true);
-		guildsPanel.repaint();
-		//setVisible(true);
-		
-		//guildsPanel.setBackground(new Color(40, 40, 40));
-		
+		@Override
+		public void finishLoading() {
+			
+		}
 	}
-
 }

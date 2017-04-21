@@ -3,6 +3,7 @@ package erasmus.bot;
 import javax.security.auth.login.LoginException;
 
 import erasmus.bot.properties.ConfigLoader;
+import erasmus.ui.ErasmusWindow;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
@@ -16,11 +17,11 @@ public class ErasmusBot {
 	
 	private Status status = Status.OFFLINE;
 	
-	public synchronized void start() throws RateLimitedException, InterruptedException, LoginException {
+	public synchronized void start(ErasmusWindow gui) throws RateLimitedException, InterruptedException, LoginException {
 		jda = new JDABuilder(AccountType.BOT)
 				.setToken("MjgxNTQ3Njk3MjcyNTIwNzA0.C4d2mQ.LFQCDLsBGGloN4nWdkLbtc8jDUI")
 				.addListener(listener)
-				.setEventManager(new ErasmusEventManager())
+				.setEventManager(gui.new UIEventManager())
 				.buildBlocking();
 		
 		status = Status.ONLINE;
