@@ -10,4 +10,5 @@ public class Values {
 	public static String userID;
 	public static String messageFormat;
 	public static String announcementFormat;
+	public static String token;
 }

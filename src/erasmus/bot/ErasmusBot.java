@@ -3,6 +3,7 @@ package erasmus.bot;
 import javax.security.auth.login.LoginException;
 
 import erasmus.bot.properties.ConfigLoader;
+import erasmus.bot.properties.Values;
 import erasmus.ui.ErasmusWindow;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
@@ -19,7 +20,7 @@ public class ErasmusBot {
 	
 	public synchronized void start(ErasmusWindow gui) throws RateLimitedException, InterruptedException, LoginException {
 		jda = new JDABuilder(AccountType.BOT)
-				.setToken("MjgxNTQ3Njk3MjcyNTIwNzA0.C4d2mQ.LFQCDLsBGGloN4nWdkLbtc8jDUI")
+				.setToken(Values.token)
 				.addListener(listener)
 				.setEventManager(gui.new UIEventManager())
 				.buildBlocking();

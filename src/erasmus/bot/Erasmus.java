@@ -7,6 +7,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
 import erasmus.bot.ErasmusBot.Status;
+import erasmus.bot.properties.ConfigLoader;
+import erasmus.bot.properties.Values;
 import erasmus.ui.ErasmusWindow;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
 
@@ -26,6 +28,7 @@ public class Erasmus {
 				}
 			}
 		});
+		ConfigLoader.loadProperties(Values.class);
 		try {
 			SwingUtilities.invokeAndWait(new Runnable() {
 				@Override

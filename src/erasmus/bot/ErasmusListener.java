@@ -49,7 +49,6 @@ public class ErasmusListener extends ListenerAdapter {
 	@Override
 	public void onReady(ReadyEvent event) {
 		jda = event.getJDA();
-		ConfigLoader.loadProperties(Values.class);
 		
 		guild = jda.getGuildById(Values.guildID);
 		
