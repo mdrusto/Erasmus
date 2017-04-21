@@ -1,0 +1,3 @@
+# erasmus
+
+Java Discord bot
